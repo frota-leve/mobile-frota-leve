@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 export default function App() {
   const [session, setSession] = useState(false);
   return (
-    <View className="h-full bg-yellow-300">
+    <View className="w-full h-full bg-yellow-300">
       {session ? (
         <Home setSession={setSession} />
       ) : (
