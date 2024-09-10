@@ -4,11 +4,18 @@ import { useSession } from "../../components/SessionContext";
 import Input from "../../components/Input";
 import { router } from "expo-router";
 
+let isFirstLogin: boolean = true;
+
 const Login = () => {
   const { updateSession } = useSession();
 
   const checkFirstLogin = () => {
-    return false;
+    if (isFirstLogin) {
+      isFirstLogin = false;
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const onSubmit = () => {
