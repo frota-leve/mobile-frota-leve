@@ -1,14 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSession } from "../components/SessionContext";
 import { router } from "expo-router";
 
 const Index = () => {
   const { session, updateSession } = useSession();
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  });
 
   useEffect(() => {
     const checkSession = () => {
-      if (session === false) {
+      if (isMounted && session === false) {
         router.push("/login");
       }
     };
