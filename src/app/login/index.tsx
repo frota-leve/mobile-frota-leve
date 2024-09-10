@@ -1,26 +1,32 @@
-import React, { Dispatch, SetStateAction } from "react";
-import {
-  Button,
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import Input from "../components/Input";
+import React from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useSession } from "../../components/SessionContext";
+import Input from "../../components/Input";
+import { router } from "expo-router";
 
-const Login = ({
-  setSession,
-}: {
-  setSession: Dispatch<SetStateAction<boolean>>;
-}) => {
+const Login = () => {
+  const { updateSession } = useSession();
+
+  const checkFirstLogin = () => {
+    return false;
+  };
+
+  const onSubmit = () => {
+    if (checkFirstLogin()) {
+      router.replace("/update-password");
+    } else {
+      updateSession(true);
+      router.replace("/");
+    }
+  };
+
   return (
     <View className="bg-white h-full justify-center items-center">
       <View className="w-[80%] justify-center items-center h-full">
         <Image
           resizeMode="contain"
           className="w-full"
-          source={require("../public/logo-big.png")}
+          source={require("../../../public/logo-big.png")}
         />
         <View className="items-center rounded-xl w-full py-2">
           <Text className="text-lg items-start mt-2 w-full font-semibold">
@@ -38,7 +44,7 @@ const Login = ({
           </View>
           <TouchableOpacity
             className="w-full items-center justify-center rounded-xl mt-8 h-14 bg-[#FFC314] text-black"
-            onPress={() => setSession(true)}
+            onPress={onSubmit}
           >
             <Text className="font-semibold text-2xl">Entrar</Text>
           </TouchableOpacity>
