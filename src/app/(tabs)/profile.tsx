@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { useSession } from "../components/SessionContext";
 import { router } from "expo-router";
+import React from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useSession } from "../../components/SessionContext";
 
-const Index = () => {
-  const { session, updateSession } = useSession();
-
-  useEffect(() => {
-    const checkSession = () => {
-      if (session === false) {
-        router.push("/login");
-      }
-    };
-
-    checkSession();
-  }, [session]);
+const Profile = () => {
+  const { updateSession } = useSession();
 
   const endSession = () => {
-    router.push("/login");
+    updateSession(false);
+    navigateToLogin();
+  };
+
+  const navigateToLogin = () => {
+    try {
+      router.push("/login");
+    } catch (error) {
+      console.error("Failed to nevigate to login: ", error);
+    }
   };
 
   return (
@@ -36,4 +35,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Profile;

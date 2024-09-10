@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useSession } from "../../components/SessionContext";
 import Input from "../../components/Input";
 import { router } from "expo-router";
 
+let count = 0; // just for test
 const Login = () => {
   const { updateSession } = useSession();
 
   const checkFirstLogin = () => {
-    return false;
+    if (count == 0) {
+      count++;
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const onSubmit = () => {
