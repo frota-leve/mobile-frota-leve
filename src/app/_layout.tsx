@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SessionContext from "../components/SessionContext";
-import { Slot } from "expo-router";
+import { router, Slot } from "expo-router";
 
 const Layout = () => {
   const [session, updateSession] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkSession = () => {
+      if (session === false) {
+        router.push("/login");
+      }
+    };
+
+    checkSession();
+  }, [session]);
+
   return (
     <SessionContext.Provider value={{ session, updateSession }}>
       <Slot />

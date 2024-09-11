@@ -5,23 +5,9 @@ import { router } from "expo-router";
 
 const Index = () => {
   const { session, updateSession } = useSession();
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  });
-
-  useEffect(() => {
-    const checkSession = () => {
-      if (isMounted && session === false) {
-        router.push("/login");
-      }
-    };
-
-    checkSession();
-  }, [session]);
 
   const endSession = () => {
+    updateSession(false);
     router.push("/login");
   };
 
