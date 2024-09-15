@@ -7,7 +7,7 @@ const Index = () => {
   const { session, updateSession } = useSession();
 
   const endSession = () => {
-    updateSession(false);
+    updateSession("");
     router.push("/login");
   };
 

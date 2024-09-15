@@ -3,11 +3,11 @@ import SessionContext from "../components/SessionContext";
 import { router, Slot } from "expo-router";
 
 const Layout = () => {
-  const [session, updateSession] = useState<boolean>(false);
+  const [session, updateSession] = useState<string>("");
 
   useEffect(() => {
     const checkSession = () => {
-      if (session === false) {
+      if (session === "") {
         router.push("/login");
       }
     };

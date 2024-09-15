@@ -1,13 +1,26 @@
-import React from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSession } from "../../components/SessionContext";
 import Input from "../../components/Input";
 import { router } from "expo-router";
+import UserService from "../../services/UserService";
 
 let isFirstLogin: boolean = true;
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const { updateSession } = useSession();
+
+  const onSubmit = () => {
+    if (checkFirstLogin()) {
+      router.replace("/update-password");
+    } else {
+      handleLogin();
+    }
+  };
 
   const checkFirstLogin = () => {
     if (isFirstLogin) {
@@ -18,13 +31,24 @@ const Login = () => {
     }
   };
 
-  const onSubmit = () => {
-    if (checkFirstLogin()) {
-      router.replace("/update-password");
-    } else {
-      updateSession(true);
+  const handleLogin = async () => {
+    setIsLoading(true);
+    const body = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const data = await UserService.authUser(body);
+      updateSession(data.token);
       router.replace("/");
+    } catch (error) {
+      Alert.alert("Erro", "Falha ao autenticar. ");
+    } finally {
+      setIsLoading(false);
     }
+
+    UserService.authUser(body);
   };
 
   return (
@@ -39,11 +63,11 @@ const Login = () => {
           <Text className="text-lg items-start mt-2 w-full font-semibold">
             Email
           </Text>
-          <Input />
+          <Input text={email} setText={setEmail} />
           <Text className="text-lg items-start mt-2 w-full font-semibold">
             Senha
           </Text>
-          <Input />
+          <Input text={password} setText={setPassword} />
           <View className="w-full items-end">
             <Text className="color-slate-400 text-sm font-semibold">
               Esqueceu?
@@ -53,7 +77,9 @@ const Login = () => {
             className="w-full items-center justify-center rounded-xl mt-8 h-14 bg-[#FFC314] text-black"
             onPress={onSubmit}
           >
-            <Text className="font-semibold text-2xl">Entrar</Text>
+            <Text className="font-semibold text-2xl">
+              {isLoading ? "Carregando..." : "Entrar"}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

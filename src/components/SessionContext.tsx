@@ -6,12 +6,12 @@ import React, {
 } from "react";
 
 interface SessionContextType {
-  session: boolean;
-  updateSession: Dispatch<SetStateAction<boolean>>;
+  session: string;
+  updateSession: Dispatch<SetStateAction<string>>;
 }
 
 const SessionContext = createContext<SessionContextType>({
-  session: false,
+  session: "",
   updateSession: () => {},
 });
 
