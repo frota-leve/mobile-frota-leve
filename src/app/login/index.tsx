@@ -39,7 +39,10 @@ const Login = () => {
     };
 
     try {
-      const data = await UserService.authUser(body);
+      // const data = await UserService.authUser(body);
+      const data = {
+        token: "token",
+      };
       updateSession(data.token);
       router.replace("/");
     } catch (error) {
@@ -47,12 +50,10 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
-
-    UserService.authUser(body);
   };
 
   return (
-    <View className="bg-white h-full justify-center items-center">
+    <View className="bg-white font-extralight h-full justify-center items-center">
       <View className="w-[80%] justify-center items-center h-full">
         <Image
           resizeMode="contain"
@@ -60,25 +61,25 @@ const Login = () => {
           source={require("../../../public/logo-big.png")}
         />
         <View className="items-center rounded-xl w-full py-2">
-          <Text className="text-lg items-start mt-2 w-full font-semibold">
+          <Text className="font-extralight text-lg items-start mt-2 w-full ">
             Email
           </Text>
           <Input text={email} setText={setEmail} />
-          <Text className="text-lg items-start mt-2 w-full font-semibold">
+          <Text className="font-extralight text-lg items-start mt-2 w-full ">
             Senha
           </Text>
           <Input text={password} setText={setPassword} />
           <View className="w-full items-end">
-            <Text className="color-slate-400 text-sm font-semibold">
+            <Text className="font-bold color-slate-400 text-sm ">
               Esqueceu?
             </Text>
           </View>
           <TouchableOpacity
-            className="w-full items-center justify-center rounded-xl mt-8 h-14 bg-[#FFC314] text-black"
+            className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
             onPress={onSubmit}
           >
-            <Text className="font-semibold text-2xl">
-              {isLoading ? "Carregando..." : "Entrar"}
+            <Text className="font-extralight text-xl">
+              {isLoading ? "CARREGANDO..." : "ENTRAR"}
             </Text>
           </TouchableOpacity>
         </View>
