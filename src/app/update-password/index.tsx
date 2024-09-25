@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/Input";
 import { router } from "expo-router";
 
 const UpdatePassword = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const onSubmit = () => {
     router.replace("/login");
   };
@@ -15,11 +18,11 @@ const UpdatePassword = () => {
           <Text className="text-lg items-start mt-2 w-full font-extralight">
             Senha
           </Text>
-          <Input />
+          <Input text={password} setText={setPassword} />
           <Text className="text-lg items-start mt-2 w-full font-extralight">
             Confirmação da Senha
           </Text>
-          <Input />
+          <Input text={confirmPassword} setText={setConfirmPassword} />
           <TouchableOpacity
             className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
             onPress={onSubmit}

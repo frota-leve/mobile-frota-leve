@@ -1,30 +1,64 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../../components/SessionContext";
 
 type Register = {
-  car: string;
+  model: string;
+  plate: string;
+  startDate: string;
+  endDate: string;
+  kmTraveled: number;
+  violations: number;
 };
 
 const Index = () => {
   const { session, updateSession } = useSession();
   const [data, setData] = useState<Register[]>([
-    { car: "Carro 1" },
-    { car: "Carro 2" },
-    { car: "Carro 3" },
-    { car: "Carro 4" },
-    { car: "Carro 5" },
-    { car: "Carro 6" },
-    { car: "Carro 7" },
-    { car: "Carro 8" },
-    { car: "Carro 9" },
-    { car: "Carro 10" },
+    {
+      model: "Corolla",
+      plate: "ABC-1234",
+      startDate: "28/08",
+      endDate: "29/08",
+      kmTraveled: 5000,
+      violations: 0,
+    },
+    {
+      model: "Civic",
+      plate: "ABC-1234",
+      startDate: "28/08",
+      endDate: "29/08",
+      kmTraveled: 6000,
+      violations: 1,
+    },
+    {
+      model: "Fusion",
+      plate: "ABC-1234",
+      startDate: "28/08",
+      endDate: "29/08",
+      kmTraveled: 4000,
+      violations: 2,
+    },
+    {
+      model: "Corvette",
+      plate: "ABC-1234",
+      startDate: "28/08",
+      endDate: "29/08",
+      kmTraveled: 3000,
+      violations: 3,
+    },
+    {
+      model: "Golf",
+      plate: "ABC-1234",
+      startDate: "28/08",
+      endDate: "29/08",
+      kmTraveled: 4500,
+      violations: 1,
+    },
   ]);
 
-  const endSession = () => {
-    updateSession("");
-    router.push("/login");
+  const handleStartRun = () => {
+    router.replace("/start-run");
   };
 
   return (
@@ -37,10 +71,34 @@ const Index = () => {
           {data &&
             data.map((register: Register) => (
               <View
-                key={register.car}
-                className="flex-row items-center py-2 px-4 my-2 border border-[#FFC314] rounded-xl"
+                key={register.model}
+                className="flex-row justify-around items-center py-2 px-2 my-2 border border-[#FFC314] rounded-xl"
               >
-                <Text className="text-lg font-extralight">{register.car}</Text>
+                <View className="mx-2 w-[20%] items-center">
+                  <Text className="text-sm">ícone</Text>
+                </View>
+                <View className=" w-[40%] items-center">
+                  <Text className="text-lg font-extralight">
+                    {register.model}
+                  </Text>
+                  <Text className="text-lg font-extralight">
+                    Início: {register.startDate}
+                  </Text>
+                  <Text className="text-lg font-extralight">
+                    Fim: {register.endDate}
+                  </Text>
+                </View>
+                <View className="ml-3 w-[40%] items-start">
+                  <Text className="text-lg font-extralight">
+                    Placa: {register.plate}
+                  </Text>
+                  <Text className="text-lg font-extralight">
+                    Percorrido: {register.kmTraveled}
+                  </Text>
+                  <Text className="text-lg font-extralight">
+                    Infrações: {register.violations}
+                  </Text>
+                </View>
               </View>
             ))}
         </ScrollView>
@@ -50,7 +108,9 @@ const Index = () => {
           className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
           onPress={() => {}}
         >
-          <Text className="font-extralight text-xl">INICIAR CORRIDA</Text>
+          <Text className="font-extralight text-xl" onPress={handleStartRun}>
+            INICIAR CORRIDA
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
