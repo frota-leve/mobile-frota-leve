@@ -1,25 +1,28 @@
+import axios from "axios";
+
+const baseURL = "http://localhost:8080";
+
 class UserService {
   static async authUser(body: { email: string; password: string }) {
     try {
-      const response = await fetch(`http://localhost:8080/auth`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: body.email,
-          password: body.password,
-        }),
-      });
+      const response = await axios.post(`${baseURL}/api/auth`, body);
 
-      if (!response.ok)
+      if (response.status !== 200)
         throw new Error(`Authentication failed: ${response.statusText}`);
 
-      const data = await response.json();
+      const data = await response.data;
       return data;
     } catch (error) {
-      console.error("Error while authenticate user, error: ", error);
+      throw console.error("Error while authenticate user, error: ", error);
+    }
+  }
+
+  static async checkFirstAcess(body: { email: string }) {
+    try {
+      const response = await axios.get(`${baseURL}/api/user/${body.email}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error while checking first acess, error: ", error);
     }
   }
 }

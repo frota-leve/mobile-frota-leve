@@ -5,8 +5,6 @@ import Input from "../../components/Input";
 import { router } from "expo-router";
 import UserService from "../../services/UserService";
 
-let isFirstLogin: boolean = true;
-
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,17 +12,23 @@ const Login = () => {
 
   const { updateSession } = useSession();
 
-  const onSubmit = () => {
-    if (checkFirstLogin()) {
+  const onSubmit = async () => {
+    if (await checkFirstLogin()) {
       router.replace("/update-password");
     } else {
       handleLogin();
     }
   };
 
-  const checkFirstLogin = () => {
+  const checkFirstLogin = async () => {
+    const body = {
+      email: email,
+    };
+
+    const response = await UserService.checkFirstAcess(body);
+    const isFirstLogin = response?.firstAccess;
+
     if (isFirstLogin) {
-      isFirstLogin = false;
       return true;
     } else {
       return false;
@@ -40,13 +44,15 @@ const Login = () => {
 
     try {
       // const data = await UserService.authUser(body);
-      const data = {
-        token: "token",
-      };
-      updateSession(data.token);
+      // const randNumber = Math.floor(Math.random() * 31)
+      // const data = {
+      //   token: randNumber.toFixed(0),
+      // }
+      // console.log('data ', data)
+      // updateSession(data.token);
       router.replace("/");
     } catch (error) {
-      Alert.alert("Erro", "Falha ao autenticar. ");
+      throw Alert.alert("Falha ao Autenticar", "Verifique suas Credenciais");
     } finally {
       setIsLoading(false);
     }
@@ -68,11 +74,13 @@ const Login = () => {
           <Text className="font-extralight text-lg items-start mt-2 w-full ">
             Senha
           </Text>
-          <Input text={password} setText={setPassword} />
+          <Input text={password} secureTextEntry={true} setText={setPassword} />
           <View className="w-full items-end">
-            <Text className="font-bold color-slate-400 text-sm ">
-              Esqueceu?
-            </Text>
+            <TouchableOpacity>
+              <Text className="font-bold color-slate-400 text-sm ">
+                Esqueceu?
+              </Text>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
