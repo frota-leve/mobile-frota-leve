@@ -1,13 +1,31 @@
 import React, { useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/Input";
 import { router } from "expo-router";
+import UserService from "../../services/UserService";
 
-const UpdatePassword = () => {
+const UpdatePassword = (email: string) => {
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleSetPassword = async () => {
+    setIsLoading(true);
+    const body = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      const data = await UserService.authUser(body);
+      console.log('data password ', data)
+    } catch (error) {
+      throw Alert.alert("Falha! Senhas Não Conferem!", "");
+    }
+}
+
   const onSubmit = () => {
+    handleSetPassword();
     router.replace("/login");
   };
 

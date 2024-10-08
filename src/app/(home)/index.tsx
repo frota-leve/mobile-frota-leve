@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../../components/SessionContext";
+import { Button, useTheme } from "react-native-paper";
 
 type Register = {
   model: string;
@@ -13,6 +14,7 @@ type Register = {
 };
 
 const Index = () => {
+  const theme = useTheme()
   const { session, updateSession } = useSession();
   const [data, setData] = useState<Register[]>([
     {
@@ -104,14 +106,9 @@ const Index = () => {
         </ScrollView>
       </View>
       <View className="w-[90%]  items-center justify-end rounded-xl py-2">
-        <TouchableOpacity
-          className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
-          onPress={() => {}}
-        >
-          <Text className="font-extralight text-xl" onPress={handleStartRun}>
-            INICIAR CORRIDA
-          </Text>
-        </TouchableOpacity>
+          <Button className="w-full" theme={theme} icon="logout" mode="contained" onPress={() => {}}>
+            Iniciar Corrida
+          </Button>
       </View>
     </View>
   );
