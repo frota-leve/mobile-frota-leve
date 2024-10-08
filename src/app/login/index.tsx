@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, View } from "react-native";
 import { useSession } from "../../components/SessionContext";
-import Input from "../../components/Input";
 import { router } from "expo-router";
 import UserService from "../../services/UserService";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, Dialog, TextInput, useTheme } from "react-native-paper";
 
 const Login = () => {
   const theme = useTheme();

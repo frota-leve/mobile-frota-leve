@@ -1,15 +1,13 @@
 import { router } from "expo-router";
 import { useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
-import { Button, Icon, useTheme } from "react-native-paper";
-import { typescale } from "react-native-paper/lib/typescript/styles/themes/v3/tokens";
+import { TouchableOpacity, View } from "react-native";
+import { Icon, useTheme } from "react-native-paper";
 
 const Navbar = () => {
   const theme = useTheme()
   const iconsSize = 30
 
-  const [chosedOption, setchosedOption] = useState<string>('home');
-  const [homeOption, setHomeOption] = useState(false)
+  const [homeOption, setHomeOption] = useState(true)
   const [profileOption, setProfileOption] = useState(false)
 
   const options = [
@@ -29,7 +27,6 @@ const Navbar = () => {
 
   const handleChange = (option: number) => {
       router.replace(options[option].path);
-      setchosedOption(options[option].name)  
       handleSelectedOption(option)
   }
   
@@ -43,7 +40,7 @@ const Navbar = () => {
       <View className="bg-foreground w-[90%] py-1 rounded-full flex-row justify-evenly">
         <TouchableOpacity
           onPress={() => handleChange(0)}
-          className={`p-2 rounded-full justify-center ${options[0].selected ? " bg-primary " : ""}`}
+          className={`p-2 rounded-full justify-center ${options[0].selected ? " bg-secondary " : ""}`}
         >
         <Icon
           source="map-marker-path"
@@ -53,7 +50,7 @@ const Navbar = () => {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleChange(1)}
-          className={`p-2 rounded-full justify-center ${options[1].selected ? " bg-primary " : ""}`}
+          className={`p-2 rounded-full justify-center ${options[1].selected ? " bg-secondary " : ""}`}
         >
         <Icon
           source="account"

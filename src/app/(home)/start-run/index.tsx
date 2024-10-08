@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../../../components/SessionContext";
+import { Button, useTheme } from "react-native-paper";
 
 type Register = {
   model: string;
@@ -14,6 +15,7 @@ type Register = {
 
 const Index = () => {
   const { session, updateSession } = useSession();
+  const theme = useTheme()
 
   const handleCancel = () => {
     router.replace("/");
@@ -31,14 +33,9 @@ const Index = () => {
         <View className="w-full border border-[#FFC314] h-[50%] rounded-lg"></View>
       </View>
       <View className="w-[90%]  items-center justify-end rounded-xl py-2">
-        <TouchableOpacity
-          className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
-          onPress={() => {}}
-        >
-          <Text className="font-extralight text-xl" onPress={handleCancel}>
-            CANCELAR
-          </Text>
-        </TouchableOpacity>
+          <Button className="w-full mt-8" theme={theme} icon="close-circle-outline" mode="contained" onPress={handleCancel}>
+            Cancelar
+          </Button>
       </View>
     </View>
   );
