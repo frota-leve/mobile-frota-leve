@@ -4,8 +4,10 @@ import { useSession } from "../../components/SessionContext";
 import Input from "../../components/Input";
 import { router } from "expo-router";
 import UserService from "../../services/UserService";
+import { Button, TextInput, useTheme } from "react-native-paper";
 
 const Login = () => {
+  const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +30,8 @@ const Login = () => {
     const response = await UserService.checkFirstAcess(body);
     const isFirstLogin = response?.firstAccess;
 
+    console.log('response, ', response)
+
     if (isFirstLogin) {
       return true;
     } else {
@@ -43,13 +47,9 @@ const Login = () => {
     };
 
     try {
-      // const data = await UserService.authUser(body);
-      // const randNumber = Math.floor(Math.random() * 31)
-      // const data = {
-      //   token: randNumber.toFixed(0),
-      // }
-      // console.log('data ', data)
-      // updateSession(data.token);
+      const data = await UserService.authUser(body);
+      console.log('data ', data)
+      updateSession(data.token);
       router.replace("/");
     } catch (error) {
       throw Alert.alert("Falha ao Autenticar", "Verifique suas Credenciais");
@@ -67,29 +67,31 @@ const Login = () => {
           source={require("../../../public/logo-big.png")}
         />
         <View className="items-center rounded-xl w-full py-2">
-          <Text className="font-extralight text-lg items-start mt-2 w-full ">
-            Email
-          </Text>
-          <Input text={email} setText={setEmail} />
-          <Text className="font-extralight text-lg items-start mt-2 w-full ">
-            Senha
-          </Text>
-          <Input text={password} secureTextEntry={true} setText={setPassword} />
+          <TextInput
+            className=" w-full rounded-full"
+            mode="outlined"
+            label="Email"
+            value={email}
+            onChangeText={email => setEmail(email)}
+          />
+          <TextInput
+            className=" w-full rounded-full mt-5"
+            secureTextEntry
+            mode="outlined"
+            label="Senha"
+            value={password}
+            onChangeText={password => setPassword(password)}
+          />
+
           <View className="w-full items-end">
-            <TouchableOpacity>
-              <Text className="font-bold color-slate-400 text-sm ">
-                Esqueceu?
-              </Text>
-            </TouchableOpacity>
+            <Button labelStyle={{color: theme.colors.onPrimary}} theme={theme} compact mode="text" onPress={() => console.log('Pressed')}>
+              Esqueceu?
+            </Button>
           </View>
-          <TouchableOpacity
-            className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
-            onPress={onSubmit}
-          >
-            <Text className="font-extralight text-xl">
-              {isLoading ? "CARREGANDO..." : "ENTRAR"}
-            </Text>
-          </TouchableOpacity>
+
+          <Button className="mt-8 w-full bg-primary" loading={isLoading} theme={theme} icon="login" mode="contained" onPress={onSubmit}>
+            Entrar
+          </Button>
         </View>
       </View>
     </View>

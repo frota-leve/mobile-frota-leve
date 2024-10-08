@@ -3,21 +3,22 @@ import { router, Slot } from "expo-router";
 import { View } from "react-native";
 import SessionContext from "../../components/SessionContext";
 import Navbar from "../../components/Navbar";
+import { PaperProvider, useTheme } from "react-native-paper";
 
 const Layout = () => {
-  const [session, updateSession] = useState<string>("");
+  const theme = useTheme()
 
   return (
-    <SessionContext.Provider value={{ session, updateSession }}>
+    <PaperProvider theme={theme}>
       <View className="h-full">
-        <View className="h-[90%]">
+        <View className="h-[91%]">
           <Slot />
         </View>
-        <View className="h-[10%]">
+        <View className="h-[9%]">
           <Navbar />
         </View>
       </View>
-    </SessionContext.Provider>
+    </PaperProvider>
   );
 };
 

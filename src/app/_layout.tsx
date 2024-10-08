@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SessionContext, { Session, SessionContextType } from "../components/SessionContext";
 import { router, Slot } from "expo-router";
 import { View } from "react-native";
+import { DefaultTheme, PaperProvider } from "react-native-paper";
 
 const Layout = () => {
   const [session, updateToken] = useState<Session>(() => {return {token: null}});
@@ -24,12 +25,26 @@ const Layout = () => {
     checkSession();
   }, [session]);
 
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: "#FFC314",
+      onPrimary: "#060606",
+      secondary: "#FFDC78",
+      foreground: "#E0E0E0",
+      // background: "#000000",
+    },
+  };
+
   return (
-    <SessionContext.Provider value={contextValue} >
-      <View className="font-thin h-full">
-        <Slot />
-      </View>
-    </SessionContext.Provider>
+    <PaperProvider theme={theme}>
+      <SessionContext.Provider value={contextValue} >
+        <View className="font-thin h-full">
+          <Slot />
+        </View>
+      </SessionContext.Provider>
+    </PaperProvider>
   );
 };
 
