@@ -6,17 +6,6 @@ import { Button, useTheme } from "react-native-paper";
 
 const Index = () => {
   const { session, updateSession } = useSession();
-  const [token, setToken] = useState("");
-
-  console.log( 'session ', session)
-
-
-  useEffect(() => {
-    const randNumber = Math.floor(Math.random() * 31)
-    const token = randNumber.toFixed(0)
-
-    setToken(token)
-  },[])
 
   const endSession = () => {
     updateSession("");

@@ -17,6 +17,7 @@ const SessionContext = createContext<SessionContextType | undefined> (undefined)
 
 export const useSession = (): SessionContextType => {
   const context = useContext(SessionContext);
+
   if (!context) {
     throw new Error("useSession must be used within a SessionProvider");
   }
@@ -28,7 +29,6 @@ export const SessionProvider: React.FC<{children: React.ReactNode}> = ({children
     const [session, setSession] = useState<Session>({token: null})
 
     const updateSession = (token: string | null) => {
-      console.log('token ', token)
       setSession({token})
     }
 

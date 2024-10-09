@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, View } from "react-native";
 import { useSession } from "../../components/SessionContext";
-import Input from "../../components/Input";
 import { router } from "expo-router";
 import UserService from "../../services/UserService";
-import { Button, TextInput, useTheme } from "react-native-paper";
+import { Button, Dialog, TextInput, useTheme } from "react-native-paper";
 
 const Login = () => {
   const theme = useTheme();
@@ -16,7 +15,7 @@ const Login = () => {
 
   const onSubmit = async () => {
     if (await checkFirstLogin()) {
-      router.replace("/update-password");
+      router.push({pathname: "/update-password", params: {email: email}});
     } else {
       handleLogin();
     }
@@ -29,8 +28,6 @@ const Login = () => {
 
     const response = await UserService.checkFirstAcess(body);
     const isFirstLogin = response?.firstAccess;
-
-    console.log('response, ', response)
 
     if (isFirstLogin) {
       return true;
@@ -48,7 +45,6 @@ const Login = () => {
 
     try {
       const data = await UserService.authUser(body);
-      console.log('data ', data)
       updateSession(data.token);
       router.replace("/");
     } catch (error) {

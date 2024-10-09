@@ -1,28 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
 import Input from "../../components/Input";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import UserService from "../../services/UserService";
+import { Button, TextInput, useTheme } from "react-native-paper";
 
-const UpdatePassword = (email: string) => {
+const UpdatePassword = () => {
+  const { email } = useLocalSearchParams();
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false)
   const [confirmPassword, setConfirmPassword] = useState("");
+  const theme = useTheme()
+
+  useEffect(() => {
+    console.log(email)
+  }, [])
 
   const handleSetPassword = async () => {
     setIsLoading(true);
     const body = {
-      email: email,
+      email: email as string,
       password: password,
     };
 
     try {
       const data = await UserService.authUser(body);
-      console.log('data password ', data)
     } catch (error) {
       throw Alert.alert("Falha! Senhas Não Conferem!", "");
     }
-}
+  }
 
   const onSubmit = () => {
     handleSetPassword();
@@ -33,20 +39,27 @@ const UpdatePassword = (email: string) => {
     <View className="bg-white h-full justify-center items-center">
       <View className="w-[80%] justify-center items-center h-full">
         <View className="items-center rounded-xl w-full py-2">
-          <Text className="text-lg items-start mt-2 w-full font-extralight">
-            Senha
-          </Text>
-          <Input text={password} setText={setPassword} />
-          <Text className="text-lg items-start mt-2 w-full font-extralight">
-            Confirmação da Senha
-          </Text>
-          <Input text={confirmPassword} setText={setConfirmPassword} />
-          <TouchableOpacity
-            className="w-full items-center justify-center rounded-xl mt-8 h-12 bg-[#FFC314] text-black"
-            onPress={onSubmit}
-          >
-            <Text className="font-extralight text-xl">ATUALIZAR</Text>
-          </TouchableOpacity>
+          <TextInput
+            className=" w-full rounded-full"
+            mode="outlined"
+            secureTextEntry
+            label="Senha"
+            value={password}
+            onChangeText={text => setPassword(text)}
+          />
+          <TextInput
+            className=" w-full rounded-full mt-5"
+            secureTextEntry
+            mode="outlined"
+            label="Confirmação de Senha"
+            value={confirmPassword}
+            onChangeText={text => setConfirmPassword(text)}
+          />
+
+          <Button className="mt-8 w-full bg-primary" loading={isLoading} theme={theme} icon="lock-reset" mode="contained" onPress={onSubmit}>
+            Atualizar Senha
+          </Button>
+
         </View>
       </View>
     </View>
