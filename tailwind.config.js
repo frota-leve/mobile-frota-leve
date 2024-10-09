@@ -7,7 +7,7 @@ module.exports = {
         primary: "#FFC314",
         secondary: "#FFDC78",
         foreground: "#E0E0E0",
-        background: "#000000",
+        background: "#fff",
       }
     },
   },

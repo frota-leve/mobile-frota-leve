@@ -5,6 +5,7 @@ import { Icon, useTheme } from "react-native-paper";
 export default function LastRunsList() {
 
     const theme = useTheme()
+    const iconsSize = 18
 
     type Register = {
         model: string;
@@ -13,6 +14,7 @@ export default function LastRunsList() {
         endDate: string;
         kmTraveled: number;
         violations: number;
+        aproved: boolean
     };
 
     const [data, setData] = useState<Register[]>([
@@ -23,6 +25,7 @@ export default function LastRunsList() {
             endDate: "29/08",
             kmTraveled: 5000,
             violations: 0,
+            aproved: false
         },
         {
             model: "Civic",
@@ -31,6 +34,7 @@ export default function LastRunsList() {
             endDate: "29/08",
             kmTraveled: 6000,
             violations: 1,
+            aproved: false
         },
         {
             model: "Fusion",
@@ -39,6 +43,7 @@ export default function LastRunsList() {
             endDate: "29/08",
             kmTraveled: 4000,
             violations: 2,
+            aproved: true
         },
         {
             model: "Corvette",
@@ -47,6 +52,7 @@ export default function LastRunsList() {
             endDate: "29/08",
             kmTraveled: 3000,
             violations: 3,
+            aproved: true
         },
         {
             model: "Golf",
@@ -55,42 +61,68 @@ export default function LastRunsList() {
             endDate: "29/08",
             kmTraveled: 4500,
             violations: 1,
+            aproved: true
         },
     ]);
 
 
     return (<>
-        <ScrollView className=" w-full max-h-[70%]">
+        <ScrollView className="p-3 w-full max-h-[80%]">
             {data &&
                 data.map((register: Register) => (
                     <View
                         key={register.model}
-                        className="flex-row justify-around items-center py-2 px-2 my-2 bg-secondary rounded-xl"
+                        className="shadow-sm shadow-foreground bg-background items-center py-2 px-2 my-2 border border-foreground rounded-xl"
                     >
-                        <View className=" w-[40%] items-start">
-                            <View className="flex-row items-center">
-                                <Icon size={20} source="car" />
+                        <View className="w-full flex-row items-start justify-between">
+                            <View className="flex-row items-center mb-1">
+                                <Icon color={theme.colors.primary} size={30} source="car" />
                                 <Text className="text-2xl ml-1 font-semibold">
                                     {register.model}
                                 </Text>
                             </View>
-                            <Text className="text-md font-extralight">
-                                {register.plate}
-                            </Text>
-                            <Text className="text-md font-extralight">
-                                Infrações: {register.violations}
-                            </Text>
+                            <View className={` ${register.aproved ? "bg-green-400" : "bg-red-400"} rounded-full px-2`}>
+                                <Text className="text-md font-extralight mb-1">
+                                {register.aproved ? "aprovado" : "aguardando"}
+                                </Text>
+                            </View>
                         </View>
-                        <View className="ml-3 w-[50%] items-start">
-                            <Text className="text-lg font-extralight">
-                                Início: {register.startDate}
-                            </Text>
-                            <Text className="text-lg font-extralight">
-                                Fim: {register.endDate}
-                            </Text>
-                            <Text className="text-lg font-extralight">
-                                Percorrido: {register.kmTraveled}Km
-                            </Text>
+                        <View className="flex-row w-full justify-around ">
+                            <View className="flex-1 items-start">
+                                <View className="flex-row items-center">
+                                    <Icon color={theme.colors.primary} size={iconsSize} source="card-text-outline" />
+                                    <Text className="text-md ml-1">
+                                        {register.plate}
+                                    </Text>
+                                </View>
+                                <View className="flex-row items-center">
+                                    <Icon color={theme.colors.primary} size={iconsSize} source="alert-circle-outline" />
+                                    <Text className="text-md ml-1">
+                                        <Text className="font-semibold" >Infrações:</Text> {register.violations}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View className=" flex-1 items-start ">
+
+                                <View className="flex-row items-center">
+                                    <Icon color={theme.colors.primary} size={iconsSize} source="ray-start-arrow" />
+                                    <Text className="text-md ml-1">
+                                        <Text className="font-semibold" >Início:</Text> {register.startDate}
+                                    </Text>
+                                </View>
+                                <View className="flex-row items-center">
+                                    <Icon color={theme.colors.primary} size={iconsSize} source="ray-end" />
+                                    <Text className="text-md ml-1">
+                                        <Text className="font-semibold" >Fim:</Text> {register.endDate}
+                                    </Text>
+                                </View>
+                                <View className="flex-row items-center">
+                                    <Icon color={theme.colors.primary} size={iconsSize} source="map-marker-distance" />
+                                    <Text className="text-md ml-1">
+                                        <Text className="font-semibold" >Percorrido:</Text> {register.kmTraveled}Km
+                                    </Text>
+                                </View>
+                            </View>
                         </View>
                     </View>
                 ))}

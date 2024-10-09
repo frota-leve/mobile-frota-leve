@@ -18,7 +18,7 @@ const Index = () => {
     <View className=" flex-1 w-[100%] justify-between items-center">
       <View className="bg-white w-[90%] flex-1 justify-center items-center gap-4">
         <View className="w-full">
-          <Text className="text-2xl font-extralight">Últimos Registros</Text>
+          <Text className="text-2xl mt-10 font-extralight">Últimos Registros</Text>
         </View>
         <LastRunsList/>
       </View>

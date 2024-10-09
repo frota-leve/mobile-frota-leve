@@ -17,7 +17,7 @@ const Layout = () => {
 
   useEffect(() => {
     const checkSession = () => {
-      if (session.token === "") {
+      if (!session.token) {
         router.push("/login");
       }
     };
@@ -33,7 +33,7 @@ const Layout = () => {
       onPrimary: "#060606",
       secondary: "#FFDC78",
       foreground: "#E0E0E0",
-      // background: "#000000",
+      background: "#fff",
     },
   };
 

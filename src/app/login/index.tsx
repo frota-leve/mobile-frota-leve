@@ -15,7 +15,7 @@ const Login = () => {
 
   const onSubmit = async () => {
     if (await checkFirstLogin()) {
-      router.replace("/update-password");
+      router.push({pathname: "/update-password", params: {email: email}});
     } else {
       handleLogin();
     }
@@ -28,8 +28,6 @@ const Login = () => {
 
     const response = await UserService.checkFirstAcess(body);
     const isFirstLogin = response?.firstAccess;
-
-    console.log('response, ', response)
 
     if (isFirstLogin) {
       return true;
@@ -47,7 +45,6 @@ const Login = () => {
 
     try {
       const data = await UserService.authUser(body);
-      console.log('data ', data)
       updateSession(data.token);
       router.replace("/");
     } catch (error) {
