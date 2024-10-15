@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { router } from "expo-router";
-import { useSession } from "../../../components/SessionContext";
+import { useSession } from "../../../contexts/SessionContext";
 import { Button, useTheme } from "react-native-paper";
 
 const Index = () => {
@@ -19,7 +19,7 @@ const Index = () => {
       <View className="w-[80%] justify-center items-center">
 
         <View className="items-center rounded-xl w-full py-2">
-          
+
           <Button className="w-full" theme={theme} icon="logout" mode="contained" onPress={endSession}>
             Sair
           </Button>

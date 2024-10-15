@@ -63,11 +63,65 @@ export default function LastRunsList() {
             violations: 1,
             aproved: true
         },
+        {
+            model: "Fusca",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 2000,
+            violations: 4,
+            aproved: false
+        },
+        {
+            model: "Fiesta",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 1000,
+            violations: 5,
+            aproved: true
+        },
+        {
+            model: "Fusca",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 2000,
+            violations: 4,
+            aproved: false
+        },
+        {
+            model: "Fiesta",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 1000,
+            violations: 5,
+            aproved: true
+        },
+        {
+            model: "Fusca",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 2000,
+            violations: 4,
+            aproved: false
+        },
+        {
+            model: "Fiesta",
+            plate: "ABC-1234",
+            startDate: "28/08",
+            endDate: "29/08",
+            kmTraveled: 1000,
+            violations: 5,
+            aproved: false
+        }
     ]);
 
 
     return (<>
-        <ScrollView className="p-3 w-full max-h-[80%]">
+        <ScrollView className="p-3 my-4 w-full max-h-full">
             {data &&
                 data.map((register: Register) => (
                     <View
@@ -83,7 +137,7 @@ export default function LastRunsList() {
                             </View>
                             <View className={` ${register.aproved ? "bg-green-400" : "bg-red-400"} rounded-full px-2`}>
                                 <Text className="text-md font-extralight mb-1">
-                                {register.aproved ? "aprovado" : "aguardando"}
+                                    {register.aproved ? "aprovado" : "aguardando"}
                                 </Text>
                             </View>
                         </View>

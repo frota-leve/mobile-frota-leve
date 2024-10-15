@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import SessionContext, { Session, SessionContextType } from "../components/SessionContext";
+import SessionContext, { Session, SessionContextType } from "../contexts/SessionContext";
 import { router, Slot } from "expo-router";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 
 const Layout = () => {
-  const [session, updateToken] = useState<Session>(() => {return {token: null}});
-  
+  const [session, updateToken] = useState<Session>(() => { return { token: null } });
+
   const updateSession = (token: string | null) => {
     updateToken({ token });
   }
-  const contextValue:SessionContextType = {
+  const contextValue: SessionContextType = {
     session,
     updateSession,
   };
@@ -40,9 +40,9 @@ const Layout = () => {
   return (
     <PaperProvider theme={theme}>
       <SessionContext.Provider value={contextValue} >
-        <View className="font-thin h-full">
+        <SafeAreaView className=" h-full font-thin ">
           <Slot />
-        </View>
+        </SafeAreaView>
       </SessionContext.Provider>
     </PaperProvider>
   );
