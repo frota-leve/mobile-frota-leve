@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { router, Slot } from "expo-router";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import SessionContext from "../../contexts/SessionContext";
 import Navbar from "../../components/Navbar";
 import { PaperProvider, useTheme } from "react-native-paper";

@@ -64,7 +64,7 @@ export default function LastRunsList() {
             aproved: true
         },
         {
-            model: "Fusca",
+            model: "Palio",
             plate: "ABC-1234",
             startDate: "28/08",
             endDate: "29/08",
@@ -91,7 +91,7 @@ export default function LastRunsList() {
             aproved: false
         },
         {
-            model: "Fiesta",
+            model: "Camaro",
             plate: "ABC-1234",
             startDate: "28/08",
             endDate: "29/08",
@@ -100,7 +100,7 @@ export default function LastRunsList() {
             aproved: true
         },
         {
-            model: "Fusca",
+            model: "Focus",
             plate: "ABC-1234",
             startDate: "28/08",
             endDate: "29/08",
@@ -109,7 +109,7 @@ export default function LastRunsList() {
             aproved: false
         },
         {
-            model: "Fiesta",
+            model: "320I",
             plate: "ABC-1234",
             startDate: "28/08",
             endDate: "29/08",
