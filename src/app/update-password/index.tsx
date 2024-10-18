@@ -12,10 +12,6 @@ const UpdatePassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const theme = useTheme()
 
-  useEffect(() => {
-    console.log(email)
-  }, [])
-
   const handleSetPassword = async () => {
     setIsLoading(true);
     const body = {
