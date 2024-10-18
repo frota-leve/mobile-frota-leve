@@ -21,16 +21,20 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+<<<<<<< Updated upstream
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
       ],
+=======
+>>>>>>> Stashed changes
       "package": "br.com.frotaleve"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+<<<<<<< Updated upstream
       "expo-router",
       [
         "expo-camera",
@@ -38,6 +42,9 @@
           "cameraPermission": "Permita $(PRODUCT_NAME) acessar sua câmera"
         }
       ]
+=======
+      "expo-router"
+>>>>>>> Stashed changes
     ],
     "extra": {
       "eas": {
