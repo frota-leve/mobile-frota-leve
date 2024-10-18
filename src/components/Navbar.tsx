@@ -26,10 +26,10 @@ const Navbar = () => {
   ]
 
   const handleChange = (option: number) => {
-      router.replace(options[option].path);
-      handleSelectedOption(option)
+    router.replace(options[option].path);
+    handleSelectedOption(option)
   }
-  
+
   const handleSelectedOption = (option: number) => {
     options.forEach((e) => e.set(false))
     options[option].set(true)
@@ -42,20 +42,20 @@ const Navbar = () => {
           onPress={() => handleChange(0)}
           className={`p-2 rounded-full justify-center ${options[0].selected ? " bg-secondary " : ""}`}
         >
-        <Icon
-          source="map-marker-path"
+          <Icon
+            source="map-marker-path"
 
-          size={iconsSize}
-        />
+            size={iconsSize}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => handleChange(1)}
           className={`p-2 rounded-full justify-center ${options[1].selected ? " bg-secondary " : ""}`}
         >
-        <Icon
-          source="account"
-          size={iconsSize}
-        />
+          <Icon
+            source="account"
+            size={iconsSize}
+          />
         </TouchableOpacity>
       </View>
     </View>
