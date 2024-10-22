@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
@@ -10,7 +10,12 @@ const Index = () => {
     const confirmEndRun = () => {
         Alert.alert("Deseja Realmente Finalizar a Corrida?", "", [
             { text: "Não" },
-            { text: "Sim", onPress: () => (handleEndRun) },
+            {
+                text: "Sim", onPress: () => {
+                    console.log('pressed')
+                    handleEndRun()
+                }
+            },
         ]);
     }
 

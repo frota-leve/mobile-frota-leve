@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../../../contexts/SessionContext";
 import { Button, TextInput, useTheme } from "react-native-paper";
@@ -29,7 +29,7 @@ const Index = () => {
 
   return (
     <View className="flex-1 justify-center  items-center">
-      <View className="w-[80%] justify-between flex-1  items-center">
+      <View className="w-[90%] justify-between flex-1  items-center">
         <View className="items-center w-full flex-1 justify-center ">
 
           <View className="items-center w-full gap-y-2">
