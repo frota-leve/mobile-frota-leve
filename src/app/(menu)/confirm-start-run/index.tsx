@@ -1,9 +1,13 @@
 import React from "react";
 import { Text, View } from "react-native";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
+import { useCar } from "../../../hooks/useCar";
 
 const Index = () => {
+    const params = useLocalSearchParams();
+    const plate = params.plate
+    const car = useCar({ plate: plate } as { plate: string });
     const theme = useTheme()
     const iconsSize = 24
 
@@ -14,6 +18,8 @@ const Index = () => {
     const handleConfirmStartRun = () => {
         router.replace("/run-in-progress")
     }
+
+
 
     return (
         <View className="flex-1 w-[100%]  items-center">
@@ -32,7 +38,7 @@ const Index = () => {
                             <View className="flex-row ">
                                 <Icon color={theme.colors.primary} size={42} source="car" />
                                 <Text className="text-5xl ml-1 font-bold">
-                                    CELTA
+                                    {car.model}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">

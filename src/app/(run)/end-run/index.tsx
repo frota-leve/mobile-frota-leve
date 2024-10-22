@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
@@ -65,31 +65,32 @@ const Index = () => {
                                     </Text>
                                 </View>
                             </View>
-
-                            <View className="flex-row items-center justify-center">
-                                <Icon
-                                    color={theme.colors.primary}
-                                    size={iconsSize}
-                                    source="card-account-details"
-                                />
-                                <Text className="text-md ml-1">
-                                    <Text className="font-semibold">Motorista:</Text> Davi Taveira
-                                </Text>
-                            </View>
-                            <View className="flex-row items-center justify-center">
-                                <Icon
-                                    color={theme.colors.primary}
-                                    size={iconsSize}
-                                    source="file-image"
-                                />
-                                <Text className="text-md ml-1 mr-4">
-                                    <Text className="font-semibold">Evidência:</Text>
-                                </Text>
-                                <Icon
-                                    color={theme.colors.primary}
-                                    size={iconsSize}
-                                    source="card-account-details"
-                                />
+                            <View className="w-full items-start">
+                                <View className="flex-row items-center justify-center">
+                                    <Icon
+                                        color={theme.colors.primary}
+                                        size={iconsSize}
+                                        source="card-account-details"
+                                    />
+                                    <Text className="text-md ml-1">
+                                        <Text className="font-semibold">Motorista:</Text> Davi Taveira
+                                    </Text>
+                                </View>
+                                <View className="flex-row items-center justify-center">
+                                    <Icon
+                                        color={theme.colors.primary}
+                                        size={iconsSize}
+                                        source="file-image"
+                                    />
+                                    <Text className="text-md ml-1 mr-4">
+                                        <Text className="font-semibold">Evidência:</Text>
+                                    </Text>
+                                    <Icon
+                                        color={theme.colors.primary}
+                                        size={iconsSize}
+                                        source="card-account-details"
+                                    />
+                                </View>
                             </View>
                         </View>
                     </View>

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Platform, Text, View } from "react-native";
+import React from "react";
+import { Text, View } from "react-native";
 import { Redirect, router } from "expo-router";
 import { Button, useTheme } from "react-native-paper";
 import { useSession } from "../../contexts/SessionContext";

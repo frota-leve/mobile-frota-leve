@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { Text, View } from "react-native";
 import { router } from "expo-router";
-import { useSession } from "../../../contexts/SessionContext";
 import { Button, useTheme } from "react-native-paper";
-import { CameraView, useCameraPermissions } from "expo-camera";
+import QRCodeView from "../../../components/QRCodeView";
 
 type Register = {
   model: string;
@@ -15,33 +14,11 @@ type Register = {
 };
 
 const Index = () => {
-  const [flash, setFlash] = useState(false);
   const theme = useTheme()
 
   const handleCancel = () => {
     router.replace("/");
   };
-  8
-  const handleFlash = () => {
-    setFlash(!flash);
-
-    if (flash) router.replace('/confirm-start-run')
-  }
-
-  const [permission, requestPermission] = useCameraPermissions();
-
-  if (!permission) {
-    // permissions loading
-  }
-
-  if (!permission?.granted) {
-    // permissions not granted yet
-    // request permissions
-  }
-
-
-
-
 
   return (
     <View className=" flex-1 w-[100%] justify-between items-center">
@@ -52,14 +29,8 @@ const Index = () => {
           </Text>
           <Text className="text-2xl font-extralight">Escaneie o QR Code</Text>
         </View>
-        <View className="w-full border border-[#FFC314] h-[55%] rounded-lg">
-          <CameraView className="flex-1 rounded-lg" >
-            <View className="w-[100%] h-full items-center justify-end py-2">
-              <Button className="w-[50%] mt-8" theme={theme} icon={flash ? "flash-off" : "flash"} mode="contained" onPress={handleFlash}>
-                {flash ? "Desligar Flash" : "Ligar Flash"}
-              </Button>
-            </View>
-          </CameraView>
+        <View className="w-full border-2 border-[#FFC314] h-[55%]">
+          <QRCodeView />
         </View>
       </View>
       <View className="w-[90%]  items-center justify-end rounded-xl py-2">
