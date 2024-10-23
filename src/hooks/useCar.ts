@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CarService from "../services/CarService";
+import { useSession } from "../contexts/SessionContext";
 
 export type Car = {
     id: string,
@@ -14,24 +15,26 @@ export type Car = {
     qrCode: string[],
 }
 
-export function useCar({ plate }: { plate: string }) {
+export function useCar() {
+    const [plate, setPlate] = useState<string>()
     const [car, setCar] = useState<Car>()
+    const { session } = useSession()
+    const token = session.token
 
     const fetchCar = async () => {
         try {
-            const response = await CarService.getCar({ plate });
-            console.log("resposta", response)
-
-            setCar(response)
+            if (plate) {
+                const response = await CarService.getCar({ plate, token });
+                setCar(response)
+            }
         } catch (error) {
-
+            throw console.error("Error while fetching car, error: ", error);
         }
     }
 
     useEffect(() => {
         fetchCar()
-    }, [])
+    }, [plate])
 
-    if (!car) return {} as Car
-    return car
+    return { car, setPlate }
 }

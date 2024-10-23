@@ -1,33 +1,48 @@
 import React, {
   createContext,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
 type Session = {
-  token: string | null,
-  user?: string,
+  businessId: string,
+  businessName: string,
+  email: string,
+  employeeId: string,
+  name: string,
+  refreshToken: string,
+  refreshTokenExpiresAt: string,
+  token: string,
+  tokenExpiresAt: string,
 }
 
 type SessionContextType = {
   session: Session;
-  updateSession: (token: string | null) => void;
+  updateSession: (data?: Session) => void;
   checkSession: () => boolean;
 }
 
-const SessionContext = createContext<SessionContextType | undefined>(undefined)
+const SessionContext = createContext<SessionContextType>({} as SessionContextType);
 
 const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<Session>({ token: null })
+  const [session, setSession] = useState<Session>({} as Session)
 
-  const updateSession = (token: string | null) => {
-    setSession({ token })
+  const updateSession = (data?: Session) => {
+    if (!data) {
+      setSession({} as Session)
+    } else {
+      setSession(data)
+    }
   }
 
   const checkSession = () => {
     if (!session.token) return false
     return true
   }
+
+  useEffect(() => {
+  }, [session])
 
   return (
     <SessionContext.Provider value={{ session, updateSession, checkSession }}>

@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { router } from "expo-router";
 import { useSession } from "../../../contexts/SessionContext";
 import { Button, TextInput, useTheme } from "react-native-paper";
+import UserService from "../../../services/UserService";
 
 const Index = () => {
   const { session, updateSession } = useSession();
@@ -10,17 +11,20 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setName('Davi')
+    setName(session.name)
   }, [])
 
   const endSession = () => {
-    updateSession("");
+    updateSession();
     router.push("/login");
   };
 
-  const handleSaveName = () => {
+  const handleUpdateName = () => {
     setIsLoading(true)
 
+    if (name) {
+      UserService.changeName({ id: session.employeeId, newName: name })
+    }
 
     setTimeout(() => setIsLoading(false), 2000)
   }
@@ -48,7 +52,7 @@ const Index = () => {
               onChangeText={name => setName(name)}
             />
 
-            <Button className=" w-full bg-primary" loading={isLoading} theme={theme} icon="content-save" mode="contained" onPress={handleSaveName}>
+            <Button className=" w-full bg-primary" loading={isLoading} theme={theme} icon="content-save" mode="contained" onPress={handleUpdateName}>
               {isLoading ? "Carregando" : "Salvar"}
             </Button>
           </View>

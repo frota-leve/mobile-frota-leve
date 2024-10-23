@@ -3,9 +3,9 @@ import axios from "axios";
 const baseURL = "http://localhost:8080";
 
 class CarService {
-    static async getCar(body: { plate: string }) {
+    static async getCar(body: { token: string, plate: string }) {
         try {
-            const response = await axios.get(`${baseURL}/api/car/${body.plate}`);
+            const response = await axios.get(`${baseURL}/api/car/${body.plate}`, { headers: { Authorization: `Bearer ${body.token}` } });
 
             if (response.status !== 200)
                 throw new Error(`Failed to get car: ${response.statusText}`);

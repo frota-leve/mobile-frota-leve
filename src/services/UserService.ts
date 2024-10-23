@@ -17,6 +17,16 @@ class UserService {
     }
   }
 
+  static async changeName(body: { id: string, newName: string }) {
+    try {
+      const response = await axios.put(`${baseURL}/api/CHANGE-EMPLOYER-NAME`, body)
+      const data = await response.data;
+    } catch (error) {
+      throw console.error("Error while updating employe name, error: ", error);
+
+    }
+  }
+
   static async checkFirstAcess(body: { email: string }) {
     try {
       const response = await axios.get(`${baseURL}/api/user/${body.email}`);

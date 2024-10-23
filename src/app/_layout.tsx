@@ -1,5 +1,5 @@
 import React from "react";
-import { router, Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 import SessionProvider from "../contexts/SessionContext";

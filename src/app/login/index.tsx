@@ -44,9 +44,8 @@ const Login = () => {
     };
 
     try {
-      // const data = await UserService.authUser(body);
-      const data = { token: "123" }
-      updateSession(data.token);
+      const data = await UserService.authUser(body);
+      updateSession(data);
       router.replace("/");
     } catch (error) {
       throw Alert.alert("Falha ao Autenticar", "Verifique suas Credenciais");
@@ -81,7 +80,7 @@ const Login = () => {
           />
 
           <View className="w-full items-end">
-            <Button labelStyle={{ color: theme.colors.onPrimary }} theme={theme} compact mode="text" onPress={() => console.log('Pressed')}>
+            <Button labelStyle={{ color: theme.colors.onPrimary }} theme={theme} compact mode="text" onPress={() => { }}>
               Esqueceu a Senha?
             </Button>
           </View>

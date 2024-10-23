@@ -1,12 +1,14 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { useTheme, Button, Icon } from 'react-native-paper';
+import { useCar } from '../hooks/useCar';
 
 export default function App() {
     const [flash, setFlash] = useState(false);
     const theme = useTheme()
+    const { car, setPlate } = useCar()
     const [permission, requestPermission] = useCameraPermissions();
 
     if (!permission) {
@@ -34,9 +36,17 @@ export default function App() {
     }
 
     const handleResult = (result: BarcodeScanningResult) => {
-        const plate = result.data;
-        console.log("platebefore: ", plate);
-        router.navigate({ pathname: '/confirm-start-run', params: { plate: plate } });
+        const plate = 'ABC0X20'
+        setPlate(plate)
+        try {
+            if (car) {
+                router.navigate({ pathname: '/confirm-start-run', params: { plate: plate } });
+            }
+
+        } catch (error) {
+            Alert.alert('Erro', 'QR Code Inválido')
+            throw console.error("Error while handlering result, error: ", error);
+        }
     }
 
     return (

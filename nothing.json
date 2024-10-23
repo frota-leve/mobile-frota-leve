@@ -1,0 +1,11 @@
+{
+  "businessId": "d26b894e-2500-471a-8214-b9d4e8d40860",
+  "businessName": "Empresa 1",
+  "email": "a",
+  "employeeId": "e90f897b-9a58-44c9-9ecf-f553144251b3",
+  "name": "a",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmcm90YS1sZXZlLWFwaSIsInN1YiI6ImEiLCJidXNpbmVzc1VuaXRJZCI6ImQyNmI4OTRlLTI1MDAtNDcxYS04MjE0LWI5ZDRlOGQ0MDg2MCIsImV4cCI6MTcyOTY4MTk3MX0.gtTgSF4hi_r63kl7AqyoVvELOuxrfqkJw5dNJPSEUjk",
+  "refreshTokenExpiresAt": "2024-10-23T08:12:51.738859",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJmcm90YS1sZXZlLWFwaSIsInN1YiI6ImEiLCJidXNpbmVzc1VuaXRJZCI6ImQyNmI4OTRlLTI1MDAtNDcxYS04MjE0LWI5ZDRlOGQ0MDg2MCIsImV4cCI6MTcyOTY2NzU3MX0.T49LkgfuNz0lEO0p-l2XRYgJjOdKvfbhOGcRXssrDKA",
+  "tokenExpiresAt": "2024-10-23T04:12:51.738636"
+}

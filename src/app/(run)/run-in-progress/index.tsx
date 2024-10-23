@@ -12,7 +12,6 @@ const Index = () => {
             { text: "Não" },
             {
                 text: "Sim", onPress: () => {
-                    console.log('pressed')
                     handleEndRun()
                 }
             },

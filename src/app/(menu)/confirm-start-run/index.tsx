@@ -1,22 +1,43 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
+import { useSession } from "../../../contexts/SessionContext";
+import RaceService from "../../../services/RaceService";
 
 const Index = () => {
     const params = useLocalSearchParams();
+    const date = new Date().toLocaleDateString('pt-BR')
     const plate = params.plate
-    const car = useCar({ plate: plate } as { plate: string });
+    const { car, setPlate } = useCar()
     const theme = useTheme()
+    const { session } = useSession()
     const iconsSize = 24
+
+    useState(() => {
+        setPlate(plate as string)
+    })
 
     const handleCancel = () => {
         router.replace("/");
     };
 
-    const handleConfirmStartRun = () => {
-        router.replace("/run-in-progress")
+    const handleConfirmStartRun = async () => {
+        try {
+            if (car) {
+                console.log('carid:', car.id)
+                console.log('employeeId:', session.employeeId)
+                const response = await RaceService.startRun({ token: session.token, carId: car.id, employeeId: session.employeeId })
+                console.log('response:', response)
+                if (response.status === 200) {
+                    Alert.alert('Sucesso!', 'Corrida Iniciada!')
+                    router.replace("/run-in-progress")
+                }
+            }
+        } catch (error) {
+
+        }
     }
 
 
@@ -38,13 +59,13 @@ const Index = () => {
                             <View className="flex-row ">
                                 <Icon color={theme.colors.primary} size={42} source="car" />
                                 <Text className="text-5xl ml-1 font-bold">
-                                    {car.model}
+                                    {car?.model}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="card-text-outline" />
                                 <Text className="text-xl font-semibold ml-1">
-                                    ABC-1234
+                                    {car?.plate}
                                 </Text>
                             </View>
                         </View>
@@ -53,13 +74,13 @@ const Index = () => {
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="ray-start-arrow" />
                                 <Text className="text-md ml-1">
-                                    <Text className="font-semibold" >Data:</Text> 23/08
+                                    <Text className="font-semibold" >Data:</Text> {date}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="card-account-details" />
                                 <Text className="text-md ml-1">
-                                    <Text className="font-semibold" >Motorista:</Text> Davi Taveira
+                                    <Text className="font-semibold" >Motorista:</Text> {session.name}
                                 </Text>
                             </View>
                         </View>

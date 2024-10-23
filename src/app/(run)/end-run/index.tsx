@@ -1,21 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
 
 const Index = () => {
+    const [evidence, setEvidence] = useState<boolean>(false)
     const theme = useTheme();
     const iconsSize = 24;
 
-    const confirmEndRun = () => {
-        Alert.alert("Deseja Realmente Finalizar a Corrida?", "", [
-            { text: "Não" },
-            { text: "Sim", onPress: () => (handleEndRun) },
-        ]);
+    const handleConfirmEvidence = () => {
+        // check evidence
+        router.replace('/')
     }
 
-    const handleEndRun = () => {
-        router.push('/end-run')
+    const handleAddEvidence = () => {
+        // send evidence from photos
+        setEvidence(true)
+        Alert.alert('Evidência', 'Evidência enviada com sucesso!')
     };
 
     return (
@@ -101,16 +102,17 @@ const Index = () => {
                             theme={theme}
                             icon="file-image-plus"
                             mode="contained"
-                            onPress={confirmEndRun}
+                            onPress={handleAddEvidence}
                         >
                             Anexar Evidência
                         </Button>
                         <Button
                             className="w-full"
                             theme={theme}
+                            disabled={!evidence}
                             icon="send-circle"
                             mode="contained"
-                            onPress={confirmEndRun}
+                            onPress={handleConfirmEvidence}
                         >
                             Confirmar Finalizar
                         </Button>
