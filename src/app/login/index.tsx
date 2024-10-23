@@ -25,7 +25,6 @@ const Login = () => {
     const body = {
       email: email,
     };
-
     const response = await UserService.checkFirstAcess(body);
     const isFirstLogin = response?.firstAccess;
 

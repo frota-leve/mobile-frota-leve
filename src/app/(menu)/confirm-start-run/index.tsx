@@ -26,13 +26,14 @@ const Index = () => {
     const handleConfirmStartRun = async () => {
         try {
             if (car) {
-                console.log('carid:', car.id)
-                console.log('employeeId:', session.employeeId)
-                const response = await RaceService.startRun({ token: session.token, carId: car.id, employeeId: session.employeeId })
+                const response = await RaceService.startRace({ token: session.token, carId: car.id, employeeId: session.employeeId })
                 console.log('response:', response)
-                if (response.status === 200) {
+                if (response.id) {
                     Alert.alert('Sucesso!', 'Corrida Iniciada!')
-                    router.replace("/run-in-progress")
+                    router.navigate({
+                        pathname: "/run-in-progress",
+                        params: { raceId: response.id }
+                    });
                 }
             }
         } catch (error) {
