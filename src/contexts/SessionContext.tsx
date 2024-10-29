@@ -4,28 +4,35 @@ import React, {
   useState,
 } from "react";
 
-type Session = {
+export type Session = {
+  name: string,
+  email: string,
+  employeeId: string,
+  businessId: string,
+  businessName: string,
   token: string | null,
-  user?: string,
+  tokenExpiresAt: string,
+  refreshToken: string,
+  refreshTokenExpiresAt: string
 }
 
 type SessionContextType = {
   session: Session;
-  updateSession: (token: string | null) => void;
+  updateSession: ({ params }: { params: Session }) => void;
   checkSession: () => boolean;
 }
 
 const SessionContext = createContext<SessionContextType | undefined>(undefined)
 
 const SessionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [session, setSession] = useState<Session>({ token: null })
+  const [session, setSession] = useState<Session>({ token: null } as Session)
 
-  const updateSession = (token: string | null) => {
-    setSession({ token })
+  const updateSession = ({ params }: { params: Session }) => {
+    setSession(params)
   }
 
   const checkSession = () => {
-    if (!session.token) return false
+    if (!session || !session.token) return false
     return true
   }
 

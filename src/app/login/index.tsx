@@ -44,9 +44,9 @@ const Login = () => {
     };
 
     try {
-      // const data = await UserService.authUser(body);
-      const data = { token: "123" }
-      updateSession(data.token);
+      const data = await UserService.authUser(body);
+      // const data = { token: "123" }
+      updateSession({ params: data });
       router.replace("/");
     } catch (error) {
       throw Alert.alert("Falha ao Autenticar", "Verifique suas Credenciais");
@@ -54,6 +54,10 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
+  const handleForgetPassword = () => {
+    Alert.alert("Esqueceu sua Senha?", "Entre em contato com seu Gestor");
+  }
 
   return (
     <View className="font-extralight h-full justify-center items-center">
@@ -81,7 +85,7 @@ const Login = () => {
           />
 
           <View className="w-full items-end">
-            <Button labelStyle={{ color: theme.colors.onPrimary }} theme={theme} compact mode="text" onPress={() => console.log('Pressed')}>
+            <Button labelStyle={{ color: theme.colors.onPrimary }} theme={theme} compact mode="text" onPress={handleForgetPassword}>
               Esqueceu a Senha?
             </Button>
           </View>

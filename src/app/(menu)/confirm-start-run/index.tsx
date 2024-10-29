@@ -1,13 +1,17 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
+import { useSession } from "../../../contexts/SessionContext";
+import RaceService from "../../../services/RaceService";
 
 const Index = () => {
     const params = useLocalSearchParams();
+    const { session } = useSession()
+    const token = session.token ?? ''
     const plate = params.plate
-    const car = useCar({ plate: plate } as { plate: string });
+    const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme()
     const iconsSize = 24
 
@@ -15,10 +19,24 @@ const Index = () => {
         router.replace("/");
     };
 
-    const handleConfirmStartRun = () => {
-        router.replace("/run-in-progress")
+    const handleConfirmStartRun = async () => {
+        const body = { employeeId: session.employeeId, carId: car.id, token: token }
+        try {
+            const response = await RaceService.startRace(body)
+            Alert.alert('Sucesso!', 'Corrida Iniciada!')
+            router.navigate({ pathname: '/run-in-progress', params: { plate: plate, dateString: response.startAt } });
+        } catch (error) {
+
+        }
+
+
+
     }
 
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const formattedDate = `${day}/${month}`;
 
 
     return (
@@ -44,7 +62,7 @@ const Index = () => {
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="card-text-outline" />
                                 <Text className="text-xl font-semibold ml-1">
-                                    ABC-1234
+                                    {car.plate}
                                 </Text>
                             </View>
                         </View>
@@ -53,13 +71,13 @@ const Index = () => {
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="ray-start-arrow" />
                                 <Text className="text-md ml-1">
-                                    <Text className="font-semibold" >Data:</Text> 23/08
+                                    <Text className="font-semibold" >Data:</Text> {formattedDate}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">
                                 <Icon color={theme.colors.primary} size={iconsSize} source="card-account-details" />
                                 <Text className="text-md ml-1">
-                                    <Text className="font-semibold" >Motorista:</Text> Davi Taveira
+                                    <Text className="font-semibold" >Motorista:</Text> {session.name}
                                 </Text>
                             </View>
                         </View>

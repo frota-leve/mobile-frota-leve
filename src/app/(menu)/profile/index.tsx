@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
-import { useSession } from "../../../contexts/SessionContext";
+import { Session, useSession } from "../../../contexts/SessionContext";
 import { Button, TextInput, useTheme } from "react-native-paper";
 
 const Index = () => {
@@ -14,7 +14,7 @@ const Index = () => {
   }, [])
 
   const endSession = () => {
-    updateSession("");
+    updateSession({ params: {} } as { params: Session });
     router.push("/login");
   };
 
