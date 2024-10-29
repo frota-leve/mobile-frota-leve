@@ -14,13 +14,12 @@ export type Car = {
     qrCode: string[],
 }
 
-export function useCar({ plate }: { plate: string }) {
+export function useCar({ plate, token }: { plate: string, token: string }) {
     const [car, setCar] = useState<Car>()
 
     const fetchCar = async () => {
         try {
-            const response = await CarService.getCar({ plate });
-            console.log("resposta", response)
+            const response = await CarService.getCar({ plate, token });
 
             setCar(response)
         } catch (error) {

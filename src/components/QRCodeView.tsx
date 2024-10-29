@@ -1,13 +1,16 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
 import { useTheme, Button, Icon } from 'react-native-paper';
+import CarService from '../services/CarService';
+import { useSession } from '../contexts/SessionContext';
 
 export default function App() {
     const [flash, setFlash] = useState(false);
     const theme = useTheme()
     const [permission, requestPermission] = useCameraPermissions();
+    const { session } = useSession()
 
     if (!permission) {
         return <View className='flex-1 justify-center items-center'>
@@ -29,14 +32,27 @@ export default function App() {
 
     const handleFlash = () => {
         setFlash(!flash);
-        const result = { data: 'ABC1234' } as BarcodeScanningResult
+        const result = { data: 'ABC0X20' } as BarcodeScanningResult
         handleResult(result)
     }
 
-    const handleResult = (result: BarcodeScanningResult) => {
+    const handleResult = async (result: BarcodeScanningResult) => {
         const plate = result.data;
-        console.log("platebefore: ", plate);
-        router.navigate({ pathname: '/confirm-start-run', params: { plate: plate } });
+        const token = session.token ?? "token";
+
+        const params = { plate: plate, token: token }
+
+        try {
+            const car = await CarService.getCar(params)
+            if (car) {
+                router.navigate({ pathname: '/confirm-start-run', params: { plate: plate } });
+                return;
+            }
+        } catch (error) {
+            Alert.alert("QR Code Inválido", "Veículo não encontrado na base de dados");
+            throw console.error('erro ao buscar veículo com qr code: ', error)
+        }
+
     }
 
     return (

@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
+import { useCar } from "../../../hooks/useCar";
+import { useSession } from "../../../contexts/SessionContext";
+import * as ImagePicker from 'expo-image-picker';
 
 const Index = () => {
+    const [image, setImage] = useState<string | null>(null);
+    const params = useLocalSearchParams();
+    const { session } = useSession()
+    const token = session.token ?? ''
+    const plate = params.plate
+    const startDate = params.formattedDate as string
+    const startTime = params.formattedTime as string
+    const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme();
     const iconsSize = 24;
 
@@ -15,8 +26,45 @@ const Index = () => {
     }
 
     const handleEndRun = () => {
-        router.push('/end-run')
+        // router.push('/end-run')
     };
+
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
+
+
+
+
+    const handleAddEvidence = () => {
+        pickImage()
+    }
+
+
+
+
+    const date = new Date();
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0
+    const hours = date.getHours();
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    const formattedDate = `${day}/${month}`;
+    const formattedTime = `${hours}:${minutes}`;
+
 
     return (
         <View className="flex-1 w-[100%]  items-center">
@@ -31,7 +79,7 @@ const Index = () => {
                         <View className=" w-full items-center py-4">
                             <View className="flex-row ">
                                 <Icon color={theme.colors.primary} size={42} source="car" />
-                                <Text className="text-5xl ml-1 font-bold">CELTA</Text>
+                                <Text className="text-5xl ml-1 font-bold">{car.model}</Text>
                             </View>
                             <View className="flex-row items-center">
                                 <Icon
@@ -39,7 +87,7 @@ const Index = () => {
                                     size={iconsSize}
                                     source="card-text-outline"
                                 />
-                                <Text className="text-xl font-semibold ml-1">ABC-1234</Text>
+                                <Text className="text-xl font-semibold ml-1">{car.plate}</Text>
                             </View>
                         </View>
                         <View className="w-full px-2">
@@ -51,7 +99,7 @@ const Index = () => {
                                         source="ray-start-arrow"
                                     />
                                     <Text className="text-md ml-1">
-                                        <Text className="font-semibold">Início:</Text> 23/08 08:23
+                                        <Text className="font-semibold">Início:</Text> {startDate} {startTime}
                                     </Text>
                                 </View>
                                 <View className="flex-row items-center">
@@ -61,7 +109,7 @@ const Index = () => {
                                         source="ray-end"
                                     />
                                     <Text className="text-md ml-1">
-                                        <Text className="font-semibold">Fim:</Text> 23/08 15:10
+                                        <Text className="font-semibold">Fim:</Text> {formattedDate} {formattedTime}
                                     </Text>
                                 </View>
                             </View>
@@ -73,7 +121,7 @@ const Index = () => {
                                         source="card-account-details"
                                     />
                                     <Text className="text-md ml-1">
-                                        <Text className="font-semibold">Motorista:</Text> Davi Taveira
+                                        <Text className="font-semibold">Motorista:</Text> {session.name}
                                     </Text>
                                 </View>
                                 <View className="flex-row items-center justify-center">
@@ -101,7 +149,7 @@ const Index = () => {
                             theme={theme}
                             icon="file-image-plus"
                             mode="contained"
-                            onPress={confirmEndRun}
+                            onPress={handleAddEvidence}
                         >
                             Anexar Evidência
                         </Button>
