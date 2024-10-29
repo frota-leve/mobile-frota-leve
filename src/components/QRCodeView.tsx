@@ -32,8 +32,6 @@ export default function App() {
 
     const handleFlash = () => {
         setFlash(!flash);
-        const result = { data: 'ABC0X20' } as BarcodeScanningResult
-        handleResult(result)
     }
 
     const handleResult = async (result: BarcodeScanningResult) => {
