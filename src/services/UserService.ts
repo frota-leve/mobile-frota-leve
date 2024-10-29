@@ -25,6 +25,26 @@ class UserService {
       console.error("Error while checking first acess, error: ", error);
     }
   }
+
+  static async changeName(body: { employeeId: string; name: string, token: string }) {
+
+    const route = `${baseURL}/api/employees/${body.employeeId}`;
+    const params = { name: body.name }
+    const headers = {
+      headers: {
+        Authorization: `Bearer ${body.token}`
+      }
+    }
+
+    try {
+      const response = await axios.put(route, params, headers);
+      const data = await response.data;
+      return data
+    } catch (error) {
+      throw console.error("Error while Updating Employee Name, error: ", error);
+
+    }
+  }
 }
 
 export default UserService;
