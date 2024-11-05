@@ -4,19 +4,21 @@ import { useLocalSearchParams } from "expo-router";
 import { Button, Icon, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
 import { useSession } from "../../../contexts/SessionContext";
-import * as ImagePicker from 'expo-image-picker';
+import PictureView from "../../../components/PictureView";
 
 const Index = () => {
-    const [image, setImage] = useState<string | null>(null);
     const params = useLocalSearchParams();
     const { session } = useSession()
     const token = session.token ?? ''
     const plate = params.plate
+    const [cameraView, setCameraView] = useState(false);
     const startDate = params.formattedDate as string
     const startTime = params.formattedTime as string
     const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme();
     const iconsSize = 24;
+    const [photo, setPhoto] = useState<string | undefined>(undefined);
+
 
     const confirmEndRun = () => {
         Alert.alert("Deseja Realmente Finalizar a Corrida?", "", [
@@ -29,27 +31,8 @@ const Index = () => {
         // router.push('/end-run')
     };
 
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
-        }
-    };
-
-
-
-
     const handleAddEvidence = () => {
-        pickImage()
+        setCameraView(true)
     }
 
 
@@ -68,13 +51,13 @@ const Index = () => {
 
     return (
         <View className="flex-1 w-[100%]  items-center">
-            <View className="w-[90%] flex-1  items-center ">
+            <View className="w-[90%] flex-1  items-center">
                 <View className="w-full items-center">
                     <Text className="text-2xl font-extralight mb-10">
                         Finalizar Corrida
                     </Text>
                 </View>
-                <View className="flex-1 w-full justify-center">
+                <View className="flex-1 w-full justify-center relative ">
                     <View className="shadow-sm w-full shadow-foreground bg-background items-center  py-6 px-2 my-2 border border-foreground rounded-xl">
                         <View className=" w-full items-center py-4">
                             <View className="flex-row ">
@@ -158,13 +141,22 @@ const Index = () => {
                             theme={theme}
                             icon="send-circle"
                             mode="contained"
+                            disabled={!photo}
                             onPress={confirmEndRun}
                         >
                             Confirmar Finalizar
                         </Button>
                     </View>
                 </View>
+                {cameraView &&
+                    <View className="absolute w-full h-full justify-center items-center ">
+                        <View className="w-full justify-center items-center h-[50%] border-2 border-primary">
+                            <PictureView setState={setCameraView} setPhoto={setPhoto} />
+                        </View>
+                    </View>
+                }
             </View>
+
         </View>
     );
 };

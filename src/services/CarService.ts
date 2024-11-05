@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8080";
+const baseURL = process.env.EXPO_PUBLIC_API_URL;
+
 
 class CarService {
     static async getCar(body: { plate: string, token: string }) {

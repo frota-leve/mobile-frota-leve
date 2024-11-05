@@ -141,8 +141,8 @@ export default function LastRunsList() {
                                 </Text>
                             </View>
                         </View>
-                        <View className="flex-row w-full justify-around ">
-                            <View className="flex-1 items-start">
+                        <View className="flex-row  w-full justify-around ">
+                            <View className="w-[45%] items-start">
                                 <View className="flex-row items-center">
                                     <Icon color={theme.colors.primary} size={iconsSize} source="card-text-outline" />
                                     <Text className="text-md ml-1">
@@ -156,7 +156,7 @@ export default function LastRunsList() {
                                     </Text>
                                 </View>
                             </View>
-                            <View className=" flex-1 items-start ">
+                            <View className="w-[55%] items-start ">
 
                                 <View className="flex-row items-center">
                                     <Icon color={theme.colors.primary} size={iconsSize} source="ray-start-arrow" />

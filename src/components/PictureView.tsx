@@ -1,17 +1,17 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
 import { useTheme, Button, Icon } from 'react-native-paper';
 import CarService from '../services/CarService';
 import { useSession } from '../contexts/SessionContext';
 
-export default function App() {
+export default function App({ setState, setPhoto }: { setState: Dispatch<SetStateAction<boolean>>, setPhoto: Dispatch<SetStateAction<string | undefined>> }) {
     const [flash, setFlash] = useState(false);
-    const [scanned, setScanned] = useState(false);
     const theme = useTheme()
     const [permission, requestPermission] = useCameraPermissions();
     const { session } = useSession()
+    const cameraRef = useRef<CameraView>(null);
 
     if (!permission) {
         return <View className='flex-1 justify-center items-center'>
@@ -31,16 +31,19 @@ export default function App() {
         );
     }
 
-    const handleFlash = () => {
+    const handleTakePicture = async () => {
         setFlash(!flash);
+        if (cameraRef.current) {
+            const photoData = await cameraRef.current.takePictureAsync({ base64: true });
+            setPhoto(photoData?.base64);
+        }
+    }
+
+    const handleCancel = () => {
+        setState(false)
     }
 
     const handleResult = async (result: BarcodeScanningResult) => {
-        if (!scanned) {
-            setScanned(true);
-        } else {
-            return
-        }
         if (!result.data) return
 
         const plate = result.data;
@@ -59,18 +62,19 @@ export default function App() {
         } catch (error) {
             Alert.alert("QR Code Inválido", "Veículo não encontrado na base de dados");
             throw console.error('erro ao buscar veículo com qr code: ', error)
-        } finally {
-            setTimeout(() => setScanned(false), 2000); //
         }
 
     }
 
     return (
-        <View className='flex-1 justify-center'>
-            <CameraView className="flex-1" facing="back" enableTorch={flash} onBarcodeScanned={handleResult}>
-                <View className="w-[100%] h-full items-center justify-end py-2">
-                    <Button className="w-[50%] mt-8" theme={theme} icon={flash ? "flash-off" : "flash"} mode="contained" onPress={handleFlash}>
-                        {flash ? "Desligar Flash" : "Ligar Flash"}
+        <View className='flex-1 justify-center w-full'>
+            <CameraView className="flex-1" facing="back" enableTorch={flash} ref={cameraRef}>
+                <View className="w-[100%] flex-row h-full items-end justify-evenly py-2">
+                    <Button className="w-[40%] mt-8" theme={theme} icon="cancel" mode="contained" onPress={handleCancel}>
+                        Cancelar
+                    </Button>
+                    <Button className="w-[40%] mt-8" theme={theme} icon="camera-enhance-outline" mode="contained" onPress={handleTakePicture}>
+                        Tirar Foto
                     </Button>
                 </View>
             </CameraView>
