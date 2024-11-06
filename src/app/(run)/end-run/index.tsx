@@ -1,58 +1,46 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Alert, Text, View } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { Button, Icon, useTheme } from "react-native-paper";
+import { router, useLocalSearchParams } from "expo-router";
+import { Button, Icon, TextInput, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
 import { useSession } from "../../../contexts/SessionContext";
-import * as ImagePicker from 'expo-image-picker';
+import PictureView from "../../../components/PictureView";
 
 const Index = () => {
-    const [image, setImage] = useState<string | null>(null);
     const params = useLocalSearchParams();
     const { session } = useSession()
     const token = session.token ?? ''
+    const [finalMileage, setFinalMileage] = useState('')
     const plate = params.plate
+    const [cameraView, setCameraView] = useState(false);
     const startDate = params.formattedDate as string
     const startTime = params.formattedTime as string
     const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme();
     const iconsSize = 24;
+    const [photo, setPhoto] = useState<string | undefined>(undefined);
 
-    const confirmEndRun = () => {
-        Alert.alert("Deseja Realmente Finalizar a Corrida?", "", [
-            { text: "Não" },
-            { text: "Sim", onPress: () => (handleEndRun) },
-        ]);
-    }
-
-    const handleEndRun = () => {
-        // router.push('/end-run')
-    };
-
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-
-        console.log(result);
-
-        if (!result.canceled) {
-            setImage(result.assets[0].uri);
+    const handleEndRun = async () => {
+        const body = { employeeId: session.employeeId, carId: car.id, token: token, photo: photo }
+        try {
+            // const response = await RaceService.startRace(body)
+            Alert.alert('Sucesso!', 'Corrida Finalizada!')
+            router.push('/')
+        } catch (error) {
+            Alert.alert('Erro!', 'Erro ao Finalizar Corrida!')
+            console.error("Error ", error)
         }
     };
 
-
-
-
     const handleAddEvidence = () => {
-        pickImage()
+        setCameraView(true)
     }
 
 
+    useEffect(() => {
+        console.log('photo')
+        console.log(photo)
+    }, [photo])
 
 
     const date = new Date();
@@ -67,14 +55,15 @@ const Index = () => {
 
 
     return (
+
         <View className="flex-1 w-[100%]  items-center">
-            <View className="w-[90%] flex-1  items-center ">
+            <View className="w-[90%] flex-1  items-center">
                 <View className="w-full items-center">
                     <Text className="text-2xl font-extralight mb-10">
                         Finalizar Corrida
                     </Text>
                 </View>
-                <View className="flex-1 w-full justify-center">
+                <View className="flex-1 w-full justify-center relative ">
                     <View className="shadow-sm w-full shadow-foreground bg-background items-center  py-6 px-2 my-2 border border-foreground rounded-xl">
                         <View className=" w-full items-center py-4">
                             <View className="flex-row ">
@@ -90,9 +79,9 @@ const Index = () => {
                                 <Text className="text-xl font-semibold ml-1">{car.plate}</Text>
                             </View>
                         </View>
-                        <View className="w-full px-2">
+                        <View className="w-full px-2 gap-y-3">
                             <View className="w-full flex-row justify-between">
-                                <View className="flex-row items-center">
+                                <View className="flex-row items-center bg--300 w-[50%]">
                                     <Icon
                                         color={theme.colors.primary}
                                         size={iconsSize}
@@ -102,7 +91,7 @@ const Index = () => {
                                         <Text className="font-semibold">Início:</Text> {startDate} {startTime}
                                     </Text>
                                 </View>
-                                <View className="flex-row items-center">
+                                <View className="flex-row items-center w-[50%]">
                                     <Icon
                                         color={theme.colors.primary}
                                         size={iconsSize}
@@ -113,31 +102,63 @@ const Index = () => {
                                     </Text>
                                 </View>
                             </View>
-                            <View className="w-full items-start">
-                                <View className="flex-row items-center justify-center">
+                            <View className=" flex-row justify-between w-full">
+                                <View className="flex-row items-center  w-[50%]">
                                     <Icon
                                         color={theme.colors.primary}
                                         size={iconsSize}
-                                        source="card-account-details"
+                                        source="ray-start-arrow"
                                     />
                                     <Text className="text-md ml-1">
-                                        <Text className="font-semibold">Motorista:</Text> {session.name}
+                                        <Text className="font-semibold">Km Inicial:</Text> {car.mileage}
                                     </Text>
                                 </View>
-                                <View className="flex-row items-center justify-center">
+                                <View className="flex-row items-center justify-start  w-[50%]">
                                     <Icon
                                         color={theme.colors.primary}
                                         size={iconsSize}
-                                        source="file-image"
+                                        source="ray-end"
                                     />
-                                    <Text className="text-md ml-1 mr-4">
-                                        <Text className="font-semibold">Evidência:</Text>
-                                    </Text>
-                                    <Icon
-                                        color={theme.colors.primary}
-                                        size={iconsSize}
-                                        source="card-account-details"
+                                    <TextInput
+                                        className="ml-1 rounded-full  flex-1"
+                                        // keyboardType="numeric"
+                                        mode="outlined"
+                                        label="Km Final"
+                                        value={finalMileage}
+                                        onChangeText={mileage => setFinalMileage(mileage)}
                                     />
+                                </View>
+                            </View>
+                            <View className="w-full flex-row items-start">
+                                <View className="w-[50%]">
+
+                                    <View className="flex-row items-center">
+                                        <Icon
+                                            color={theme.colors.primary}
+                                            size={iconsSize}
+                                            source="card-account-details"
+                                        />
+                                        <Text className="text-md ml-1">
+                                            <Text className="font-semibold">Motorista:</Text> {session.name}
+                                        </Text>
+                                    </View>
+                                </View>
+                                <View className="w-[50%]">
+                                    <View className="flex-row items-center">
+                                        <Icon
+                                            color={theme.colors.primary}
+                                            size={iconsSize}
+                                            source="file-image"
+                                        />
+                                        <Text className="text-md ml-1 mr-1">
+                                            <Text className="font-semibold">Evidência:</Text>
+                                        </Text>
+                                        <Icon
+                                            color={photo ? 'green' : 'red'}
+                                            size={iconsSize}
+                                            source={photo ? 'check-circle' : 'close-circle'}
+                                        />
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -158,14 +179,24 @@ const Index = () => {
                             theme={theme}
                             icon="send-circle"
                             mode="contained"
-                            onPress={confirmEndRun}
+                            disabled={!photo}
+                            onPress={handleEndRun}
                         >
                             Confirmar Finalizar
                         </Button>
                     </View>
                 </View>
+                {cameraView &&
+                    <View className="absolute w-full h-full justify-center items-center ">
+                        <View className="w-full justify-center items-center h-[50%] border-2 border-primary">
+                            <PictureView setState={setCameraView} setPhoto={setPhoto} />
+                        </View>
+                    </View>
+                }
             </View>
+
         </View>
+
     );
 };
 

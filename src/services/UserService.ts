@@ -1,9 +1,10 @@
 import axios from "axios";
 
-const baseURL = "http://localhost:8080";
+const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 class UserService {
   static async authUser(body: { email: string; password: string }) {
+
     try {
       const response = await axios.post(`${baseURL}/api/auth`, body);
 
