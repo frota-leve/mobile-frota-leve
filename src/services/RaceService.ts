@@ -22,6 +22,7 @@ class RaceService {
     }
 
     static async endRace(body: { raceId: string, finalMileage: number, file: string, token: string }) {
+
         const params = { id: body.raceId, finalMileage: body.finalMileage, file: body.file }
         const route = `${baseURL}/api/race/finish/${body.raceId}`;
         const headers = {

@@ -32,10 +32,16 @@ export default function App({ setState, setPhoto }: { setState: Dispatch<SetStat
     }
 
     const handleTakePicture = async () => {
-        setFlash(!flash);
         if (cameraRef.current) {
             const photoData = await cameraRef.current.takePictureAsync({ base64: true });
             setPhoto(photoData?.base64);
+        }
+        try {
+            Alert.alert("Foto Tirada", "Foto tirada com sucesso");
+        } catch (error) {
+
+        } finally {
+            setState(false);
         }
     }
 
@@ -50,8 +56,6 @@ export default function App({ setState, setPhoto }: { setState: Dispatch<SetStat
         const token = session.token ?? "token";
 
         const params = { plate: plate, token: token }
-        console.log('params')
-        console.log(params)
 
         try {
             const car = await CarService.getCar(params)

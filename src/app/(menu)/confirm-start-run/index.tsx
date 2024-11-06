@@ -26,7 +26,8 @@ const Index = () => {
             Alert.alert('Sucesso!', 'Corrida Iniciada!')
             router.navigate({ pathname: '/run-in-progress', params: { plate: plate, dateString: response.startAt } });
         } catch (error) {
-
+            Alert.alert('Erro!', 'Erro ao Iniciar Corrida!')
+            console.error("Error ", error)
         }
 
 
@@ -72,6 +73,12 @@ const Index = () => {
                                 <Icon color={theme.colors.primary} size={iconsSize} source="ray-start-arrow" />
                                 <Text className="text-md ml-1">
                                     <Text className="font-semibold" >Data:</Text> {formattedDate}
+                                </Text>
+                            </View>
+                            <View className="flex-row items-center">
+                                <Icon color={theme.colors.primary} size={iconsSize} source="car-cruise-control" />
+                                <Text className="text-md ml-1">
+                                    <Text className="font-semibold" >Km Atual:</Text> {car.mileage}
                                 </Text>
                             </View>
                             <View className="flex-row items-center">

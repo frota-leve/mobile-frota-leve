@@ -1,7 +1,7 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useTheme, Button, Icon } from 'react-native-paper';
 import CarService from '../services/CarService';
 import { useSession } from '../contexts/SessionContext';
@@ -9,6 +9,8 @@ import { useSession } from '../contexts/SessionContext';
 export default function App() {
     const [flash, setFlash] = useState(false);
     const [scanned, setScanned] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const theme = useTheme()
     const [permission, requestPermission] = useCameraPermissions();
     const { session } = useSession()
@@ -36,19 +38,14 @@ export default function App() {
     }
 
     const handleResult = async (result: BarcodeScanningResult) => {
-        if (!scanned) {
-            setScanned(true);
-        } else {
-            return
-        }
+        setIsLoading(true);
+        setScanned(true);
         if (!result.data) return
 
         const plate = result.data;
         const token = session.token ?? "token";
 
         const params = { plate: plate, token: token }
-        console.log('params')
-        console.log(params)
 
         try {
             const car = await CarService.getCar(params)
@@ -57,21 +54,42 @@ export default function App() {
                 return;
             }
         } catch (error) {
-            Alert.alert("QR Code Inválido", "Veículo não encontrado na base de dados");
             throw console.error('erro ao buscar veículo com qr code: ', error)
         } finally {
-            setTimeout(() => setScanned(false), 2000); //
+            setIsLoading(false);
         }
 
     }
 
     return (
         <View className='flex-1 justify-center'>
-            <CameraView className="flex-1" facing="back" enableTorch={flash} onBarcodeScanned={handleResult}>
+            <CameraView className="flex-1" facing="back" enableTorch={flash} onBarcodeScanned={scanned ? undefined : handleResult}>
                 <View className="w-[100%] h-full items-center justify-end py-2">
-                    <Button className="w-[50%] mt-8" theme={theme} icon={flash ? "flash-off" : "flash"} mode="contained" onPress={handleFlash}>
-                        {flash ? "Desligar Flash" : "Ligar Flash"}
-                    </Button>
+                    {scanned ?
+                        <View className='flex-1 justify-center items-center w-full'>
+                            <View className='bg-foreground py-16 w-[70%] justify-center items-center rounded-3xl'>
+                                {isLoading ?
+                                    <>
+                                        <Icon color={theme.colors.primary} size={42} source="reload" />
+                                        <Text className="text-onPrimary text-center font-bold text-2xl">Carregando...</Text>
+                                    </>
+                                    :
+                                    <>
+                                        <Text className="text-onPrimary text-center font-bold text-2xl">QR Code Inválido</Text>
+                                        <Button className="w-[90%] mt-8" theme={theme} icon="qrcode-scan" mode="contained" onPress={() => setScanned(false)}>
+                                            Escanear Novamente
+                                        </Button>
+                                    </>
+
+                                }
+                            </View>
+                        </View>
+                        :
+                        <Button className="w-[50%] mt-8" theme={theme} icon={flash ? "flash-off" : "flash"} mode="contained" onPress={handleFlash}>
+                            {flash ? "Desligar Flash" : "Ligar Flash"}
+                        </Button>
+                    }
+
                 </View>
             </CameraView>
         </View>

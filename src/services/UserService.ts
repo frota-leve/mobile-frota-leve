@@ -5,8 +5,6 @@ const baseURL = process.env.EXPO_PUBLIC_API_URL;
 class UserService {
   static async authUser(body: { email: string; password: string }) {
 
-    console.log('baseURL')
-    console.log(baseURL)
     try {
       const response = await axios.post(`${baseURL}/api/auth`, body);
 

@@ -45,7 +45,6 @@ const Login = () => {
 
     try {
       const data = await UserService.authUser(body);
-      // const data = { token: "123" }
       updateSession({ params: data });
       router.replace("/");
     } catch (error) {
