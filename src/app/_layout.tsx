@@ -1,8 +1,9 @@
 import React from "react";
-import { router, Slot } from "expo-router";
+import { Slot } from "expo-router";
 import { SafeAreaView } from "react-native";
 import { DefaultTheme, PaperProvider } from "react-native-paper";
 import SessionProvider from "../contexts/SessionContext";
+import { RaceProvider } from "../contexts/RaceContext";
 
 const Layout = () => {
 
@@ -21,9 +22,11 @@ const Layout = () => {
   return (
     <PaperProvider theme={theme}>
       <SessionProvider>
-        <SafeAreaView className="h-full font-thin">
-          <Slot />
-        </SafeAreaView>
+        <RaceProvider>
+          <SafeAreaView className="h-full font-thin">
+            <Slot />
+          </SafeAreaView>
+        </RaceProvider>
       </SessionProvider>
     </PaperProvider>
   );

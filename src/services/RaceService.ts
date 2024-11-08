@@ -1,4 +1,5 @@
 import axios from "axios";
+import { CameraCapturedPicture } from "expo-camera";
 
 const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -21,20 +22,24 @@ class RaceService {
         }
     }
 
-    static async endRace(body: { raceId: string, finalMileage: number, file: string, token: string }) {
+    static async endRace(body: { raceId: string, finalMileage: number, file: CameraCapturedPicture, token: string }) {
 
-        const params = { id: body.raceId, finalMileage: body.finalMileage, file: body.file }
-        const route = `${baseURL}/api/race/finish/${body.raceId}`;
+        const route = `${baseURL}/api/race/finish/${body.raceId}?finalMileage=${body.finalMileage}`;
+
         const headers = {
             headers: {
                 Authorization: `Bearer ${body.token}`,
                 'Content-Type': 'multipart/form-data'
-                // ContentType: 'multipart/form-data'
             }
         }
 
+        const formData = new FormData();
+        if (!body.file.base64) return
+        formData.append('file', body.file.base64);
+
         try {
-            const response = await axios.put(route, params, headers);
+            const response = await axios.put(route, formData, headers);
+
             const data = await response.data;
             return data;
         } catch (error) {
@@ -42,6 +47,9 @@ class RaceService {
             throw error
         }
     }
+
+
+
 }
 
 export default RaceService;
