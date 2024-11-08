@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Icon, TextInput, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
 import { useSession } from "../../../contexts/SessionContext";
 import PictureView from "../../../components/PictureView";
+import RaceService from "../../../services/RaceService";
+import { useRace } from "../../../contexts/RaceContext";
+import { CameraCapturedPicture } from "expo-camera";
 
 const Index = () => {
     const params = useLocalSearchParams();
@@ -18,12 +21,17 @@ const Index = () => {
     const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme();
     const iconsSize = 24;
-    const [photo, setPhoto] = useState<string | undefined>(undefined);
+    const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(undefined);
+    const { raceId } = useRace()
 
     const handleEndRun = async () => {
-        const body = { employeeId: session.employeeId, carId: car.id, token: token, photo: photo }
+
+        if (!raceId || !photo) return
+
+        const body = { raceId: raceId, finalMileage: Number(finalMileage), file: photo, token: token }
+
         try {
-            // const response = await RaceService.startRace(body)
+            const response = await RaceService.endRace(body)
             Alert.alert('Sucesso!', 'Corrida Finalizada!')
             router.push('/')
         } catch (error) {
@@ -35,13 +43,6 @@ const Index = () => {
     const handleAddEvidence = () => {
         setCameraView(true)
     }
-
-
-    useEffect(() => {
-        console.log('photo')
-        console.log(photo)
-    }, [photo])
-
 
     const date = new Date();
 

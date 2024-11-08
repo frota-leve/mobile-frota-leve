@@ -5,6 +5,7 @@ import { Button, Icon, useTheme } from "react-native-paper";
 import { useCar } from "../../../hooks/useCar";
 import { useSession } from "../../../contexts/SessionContext";
 import RaceService from "../../../services/RaceService";
+import { useRace } from "../../../contexts/RaceContext";
 
 const Index = () => {
     const params = useLocalSearchParams();
@@ -14,6 +15,7 @@ const Index = () => {
     const car = useCar({ plate: plate, token: token } as { plate: string, token: string });
     const theme = useTheme()
     const iconsSize = 24
+    const { setRaceId } = useRace()
 
     const handleCancel = () => {
         router.replace("/");
@@ -23,6 +25,7 @@ const Index = () => {
         const body = { employeeId: session.employeeId, carId: car.id, token: token }
         try {
             const response = await RaceService.startRace(body)
+            setRaceId(response.id)
             Alert.alert('Sucesso!', 'Corrida Iniciada!')
             router.navigate({ pathname: '/run-in-progress', params: { plate: plate, dateString: response.startAt } });
         } catch (error) {

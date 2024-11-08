@@ -1,4 +1,4 @@
-import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
+import { BarcodeScanningResult, CameraCapturedPicture, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import React, { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { Alert, Text, View } from 'react-native';
@@ -6,7 +6,7 @@ import { useTheme, Button, Icon } from 'react-native-paper';
 import CarService from '../services/CarService';
 import { useSession } from '../contexts/SessionContext';
 
-export default function App({ setState, setPhoto }: { setState: Dispatch<SetStateAction<boolean>>, setPhoto: Dispatch<SetStateAction<string | undefined>> }) {
+export default function App({ setState, setPhoto }: { setState: Dispatch<SetStateAction<boolean>>, setPhoto: Dispatch<SetStateAction<CameraCapturedPicture | undefined>> }) {
     const [flash, setFlash] = useState(false);
     const theme = useTheme()
     const [permission, requestPermission] = useCameraPermissions();
@@ -34,7 +34,7 @@ export default function App({ setState, setPhoto }: { setState: Dispatch<SetStat
     const handleTakePicture = async () => {
         if (cameraRef.current) {
             const photoData = await cameraRef.current.takePictureAsync({ base64: true });
-            setPhoto(photoData?.base64);
+            setPhoto(photoData);
         }
         try {
             Alert.alert("Foto Tirada", "Foto tirada com sucesso");
