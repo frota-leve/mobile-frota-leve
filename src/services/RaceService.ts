@@ -33,9 +33,17 @@ class RaceService {
             }
         }
 
+        const filename = body.file.uri.split('/').pop();
+        const match = /\.(\w+)$/.exec(filename);
+        const type = match ? `image/${match[1]}` : `image`;
+
         const formData = new FormData();
         if (!body.file.base64) return
-        formData.append('file', body.file.base64);
+        formData.append('file', {
+            uri: body.file.uri,
+            name: filename,
+            type: type,
+        });
 
         try {
             const response = await axios.put(route, formData, headers);
