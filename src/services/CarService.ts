@@ -5,7 +5,6 @@ const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 class CarService {
     static async getCar(body: { plate: string, token: string }) {
-
         try {
             const route = `${baseURL}/api/car/${body.plate}`;
             const headers = {
