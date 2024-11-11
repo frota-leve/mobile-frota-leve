@@ -56,8 +56,27 @@ class RaceService {
         }
     }
 
+    static async getRaces(body: { token: string, page?: number, size?: number }) {
+        const route = `${baseURL}/api/race/races/me?page=${body.page || 0}&size=${body.size || 10}`;
+        
+        const headers = {
+            headers: {
+                Authorization: `Bearer ${body.token}`
+            }
+        }
 
+        console.log("console token", headers);
 
+        try {
+            const response = await axios.get(route, headers);
+            const data = await response.data;
+            console.log("Dados das corridas encontrados:", data);
+            return data;
+        } catch (error) {
+            console.error("Erro ao buscar corridas:", error);
+            throw error;
+        }
+    }
 }
 
 export default RaceService;

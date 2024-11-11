@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { Icon, useTheme } from "react-native-paper";
+import RaceService from "../services/RaceService";
+import { useSession } from '../contexts/SessionContext';
 
 export default function LastRunsList() {
-
+    const { session } = useSession();
     const theme = useTheme()
     const iconsSize = 18
 
@@ -17,108 +19,36 @@ export default function LastRunsList() {
         aproved: boolean
     };
 
-    const [data, setData] = useState<Register[]>([
-        {
-            model: "Corolla",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 5000,
-            violations: 0,
-            aproved: false
-        },
-        {
-            model: "Civic",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 6000,
-            violations: 1,
-            aproved: false
-        },
-        {
-            model: "Fusion",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 4000,
-            violations: 2,
-            aproved: true
-        },
-        {
-            model: "Corvette",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 3000,
-            violations: 3,
-            aproved: true
-        },
-        {
-            model: "Golf",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 4500,
-            violations: 1,
-            aproved: true
-        },
-        {
-            model: "Palio",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 2000,
-            violations: 4,
-            aproved: false
-        },
-        {
-            model: "Fiesta",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 1000,
-            violations: 5,
-            aproved: true
-        },
-        {
-            model: "Fusca",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 2000,
-            violations: 4,
-            aproved: false
-        },
-        {
-            model: "Camaro",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 1000,
-            violations: 5,
-            aproved: true
-        },
-        {
-            model: "Focus",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 2000,
-            violations: 4,
-            aproved: false
-        },
-        {
-            model: "320I",
-            plate: "ABC-1234",
-            startDate: "28/08",
-            endDate: "29/08",
-            kmTraveled: 1000,
-            violations: 5,
-            aproved: false
-        }
-    ]);
+    const [data, setData] = useState<Register[]>([]);
+    const [loading, setLoading] = useState(true);
 
+    useEffect(() => {
+        const fetchRaces = async () => {
+            try {
+                if (!session.token) {
+                    console.error("Token não encontrado");
+                    return;
+                }
+                const response = await RaceService.getRaces({ token: session.token });
+                setData(response.content);
+            } catch (error: any) {
+                if (error?.response?.status === 403) {
+                    console.error("Sessão expirada ou token inválido");
+
+                } else {
+                    console.error("Erro ao carregar corridas:", error);
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchRaces();
+    }, [session.token]);
+
+    if (loading) {
+        return <Text>Carregando...</Text>;
+    }
 
     return (<>
         <ScrollView className="p-3 my-4 w-full max-h-full">
