@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "mobile-frota-leve",
-    "slug": "mobile-frota-leve",
+    "name": "frota-leve",
+    "slug": "frota-leve",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "scheme": "mobile-frota-leve",
+    "scheme": "frota-leve",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -47,8 +47,12 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "d1207bf2-56fa-4986-b5f5-67a71e891ba5"
+        "projectId": "f7ff7494-7391-4cfa-b665-290c8c228439"
+      },
+      "router": {
+        "origin": false
       }
-    }
+    },
+    "owner": "frota_leve"
   }
 }
