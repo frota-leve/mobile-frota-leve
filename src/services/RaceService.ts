@@ -7,7 +7,7 @@ class RaceService {
     static async startRace(body: { employeeId: string, carId: string, token: string }) {
 
         const params = { employeeId: body.employeeId, carId: body.carId }
-        const route = `${baseURL}/api/race`;
+        const route = `${baseURL}/api/races`;
         const headers = {
             headers: {
                 Authorization: `Bearer ${body.token}`
@@ -24,7 +24,7 @@ class RaceService {
 
     static async endRace(body: { raceId: string, finalMileage: number, file: CameraCapturedPicture, token: string }) {
 
-        const route = `${baseURL}/api/race/finish/${body.raceId}?finalMileage=${body.finalMileage}`;
+        const route = `${baseURL}/api/races/finish/${body.raceId}?finalMileage=${body.finalMileage}`;
 
         const headers = {
             headers: {
@@ -57,7 +57,7 @@ class RaceService {
     }
 
     static async getRaces(body: { token: string, page?: number, size?: number }) {
-        const route = `${baseURL}/api/race/races/me?page=${body.page || 0}&size=${body.size || 10}`;
+        const route = `${baseURL}/api/races/me?page=${body.page || 0}&size=${body.size || 10}`;
         
         const headers = {
             headers: {

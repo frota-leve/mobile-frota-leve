@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Image, View } from "react-native";
+import { Alert, Image, View, Text, ScrollView } from "react-native";
 import { useSession } from "../../contexts/SessionContext";
 import { router } from "expo-router";
 import UserService from "../../services/UserService";
@@ -10,6 +10,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<any>('');
+  const [data, setData] = useState<any>('');
 
   const { updateSession } = useSession();
 
@@ -37,18 +39,19 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    setIsLoading(true);
     const body = {
       email: email,
       password: password,
     };
 
     try {
+      setIsLoading(true);
       const data = await UserService.authUser(body);
       updateSession({ params: data });
       router.replace("/");
     } catch (error) {
-      throw Alert.alert("Falha ao Autenticar", "Verifique suas Credenciais");
+      const errorJson = JSON.stringify(error, null, 2)
+      setError(errorJson)
     } finally {
       setIsLoading(false);
     }
@@ -92,6 +95,9 @@ const Login = () => {
           <Button className="mt-8 w-full bg-primary" loading={isLoading} theme={theme} icon="login" mode="contained" onPress={onSubmit}>
             Entrar
           </Button>
+          <ScrollView className="h-[30%]">
+            <Text>{error}</Text>
+          </ScrollView>
         </View>
       </View>
     </View>

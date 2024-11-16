@@ -4,18 +4,9 @@ const baseURL = process.env.EXPO_PUBLIC_API_URL;
 
 class UserService {
   static async authUser(body: { email: string; password: string }) {
-
-    try {
-      const response = await axios.post(`${baseURL}/api/auth`, body);
-
-      if (response.status !== 200)
-        throw new Error(`Authentication failed: ${response.statusText}`);
-
-      const data = await response.data;
-      return data;
-    } catch (error) {
-      throw console.error("Error while authenticate user, error: ", error);
-    }
+    const response = await axios.post(`${baseURL}/api/auth`, body);
+    const data = await response.data;
+    return data;
   }
 
   static async checkFirstAcess(body: { email: string }) {
