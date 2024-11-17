@@ -10,12 +10,8 @@ class UserService {
   }
 
   static async checkFirstAcess(body: { email: string }) {
-    try {
-      const response = await axios.get(`${baseURL}/api/user/${body.email}`);
-      return response.data;
-    } catch (error) {
-      console.error("Error while checking first acess, error: ", error);
-    }
+    const { data } = await axios.get(`${baseURL}/api/user/${body.email}`);
+    return data;
   }
 
   static async changeName(body: { employeeId: string; name: string, token: string }) {
