@@ -6,7 +6,7 @@
   "build": {
     "preview": {
       "env": {
-        "EXPO_PUBLIC_API_URL": "https://api.frotaleve.app.br"
+        "EXPO_PUBLIC_API_URL": "https://api.frotaleve.com.br"
       },
       "android": {
         "buildType": "apk"

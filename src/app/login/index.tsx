@@ -9,36 +9,39 @@ const Login = () => {
   const theme = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
+  const [showCheckFirstLoginBtn, setShowCheckFirstLoginBtn] =
+    useState<boolean>(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<any>('');
-  const [data, setData] = useState<any>('');
+  const [error, setError] = useState<any>("");
+  const [data, setData] = useState<any>("");
 
   const { updateSession } = useSession();
-
-  const onSubmit = async () => {
-    if (await checkFirstLogin()) {
-      router.push({ pathname: "/update-password", params: { email: email } });
-    } else {
-      handleLogin();
-    }
-  };
 
   const checkFirstLogin = async () => {
     const body = {
       email: email,
     };
 
-    const response = await UserService.checkFirstAcess(body);
-    const isFirstLogin = response?.firstAccess;
-
-    if (isFirstLogin) {
-      return true;
-    } else {
-      return false;
+    try {
+      const response = await UserService.checkFirstAcess(body);
+      setShowConfirmPassword(response?.firstAccess);
+      setShowCheckFirstLoginBtn(false);
+      setShowPassword(true);
+    } catch(err) {
+      Alert.alert('Falha na validação do email, por favor tente novamente')
     }
   };
 
   const handleLogin = async () => {
+    if (showConfirmPassword && password !== confirmPassword) {
+      Alert.alert('As senhas não coincidem')
+      return;
+    }
+
     const body = {
       email: email,
       password: password,
@@ -50,8 +53,8 @@ const Login = () => {
       updateSession({ params: data });
       router.replace("/");
     } catch (error) {
-      const errorJson = JSON.stringify(error, null, 2)
-      setError(errorJson)
+      const errorJson = JSON.stringify(error, null, 2);
+      setError(errorJson);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +62,7 @@ const Login = () => {
 
   const handleForgetPassword = () => {
     Alert.alert("Esqueceu sua Senha?", "Entre em contato com seu Gestor");
-  }
+  };
 
   return (
     <View className="font-extralight h-full justify-center items-center">
@@ -72,32 +75,63 @@ const Login = () => {
         <View className="items-center rounded-xl w-full py-2">
           <TextInput
             className=" w-full rounded-full"
+            keyboardType="email-address"
             mode="outlined"
             label="Email"
             value={email}
-            onChangeText={email => setEmail(email)}
+            onChangeText={(email) => setEmail(email)}
           />
-          <TextInput
-            className=" w-full rounded-full mt-5"
-            secureTextEntry
-            mode="outlined"
-            label="Senha"
-            value={password}
-            onChangeText={password => setPassword(password)}
-          />
-
-          <View className="w-full items-end">
-            <Button labelStyle={{ color: theme.colors.onPrimary }} theme={theme} compact mode="text" onPress={handleForgetPassword}>
-              Esqueceu a Senha?
+          {showCheckFirstLoginBtn ? (
+            <Button
+              className="mt-8 w-full bg-primary"
+              loading={isLoading}
+              theme={theme}
+              icon="login"
+              mode="contained"
+              onPress={checkFirstLogin}
+            >
+              Entrar
             </Button>
-          </View>
+          ) : null}
 
-          <Button className="mt-8 w-full bg-primary" loading={isLoading} theme={theme} icon="login" mode="contained" onPress={onSubmit}>
-            Entrar
-          </Button>
-          <ScrollView className="h-[30%]">
-            <Text>{error}</Text>
-          </ScrollView>
+          {showPassword ? 
+            <TextInput
+              className=" w-full rounded-full mt-5"
+              secureTextEntry
+              mode="outlined"
+              label="Senha"
+              value={password}
+              onChangeText={(password) => setPassword(password)}
+            /> : null
+          }
+          {
+            showConfirmPassword ? 
+              <TextInput
+                className=" w-full rounded-full mt-5"
+                secureTextEntry
+                mode="outlined"
+                label="Confirme sua senha"
+                value={confirmPassword}
+                onChangeText={(confirmPassword) =>
+                  setConfirmPassword(confirmPassword)
+                }
+              />
+            : null
+          }
+          {
+            !showCheckFirstLoginBtn ? 
+            <Button
+              className="mt-8 w-full bg-primary"
+              loading={isLoading}
+              theme={theme}
+              icon="login"
+              mode="contained"
+              onPress={handleLogin}
+            >
+              Entrar
+            </Button>
+            : null
+          }
         </View>
       </View>
     </View>
