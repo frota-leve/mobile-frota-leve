@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Text, View, Image, Keyboard } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Button, Icon, TextInput, useTheme } from "react-native-paper";
 import { useSession } from "../../../contexts/SessionContext";
@@ -20,7 +20,8 @@ const Index = () => {
   const [photo, setPhoto] = useState<CameraCapturedPicture | undefined>(
     undefined
   );
-  const { raceId, startAt, startMileage }: any = params
+  const { raceId, startAt, startMileage }: any = params;
+  const [loadingEndRun, setLoadingEndRun] = useState<boolean>(false);
 
   const handleEndRun = async () => {
     if (!raceId || !photo) return;
@@ -33,27 +34,26 @@ const Index = () => {
     };
 
     try {
+      setLoadingEndRun(true);
       await RaceService.endRace(body);
       Alert.alert("Sucesso!", "Corrida Finalizada!");
       router.push("/");
     } catch (error) {
       Alert.alert("Erro!", "Erro ao Finalizar Corrida!");
       console.error("Error ", error);
+    } finally {
+      setLoadingEndRun(false);
     }
   };
 
   const handleAddEvidence = () => {
+    Keyboard.dismiss();
     setCameraView(true);
   };
 
   return (
     <View className="flex-1 w-[100%]  items-center">
       <View className="w-[90%] flex-1  items-center">
-        <View className="w-full items-center">
-          <Text className="text-2xl font-extralight mb-10">
-            Finalizar Corrida
-          </Text>
-        </View>
         <View className="flex-1 w-full justify-center relative ">
           <View className="shadow-sm w-full shadow-foreground bg-background items-center  py-6 px-2 my-2 border border-foreground rounded-xl">
             <View className="w-full px-2 gap-y-3">
@@ -111,11 +111,20 @@ const Index = () => {
                     <Text className="text-md ml-1 mr-1">
                       <Text className="font-semibold">Evidência:</Text>
                     </Text>
-                    <Icon
+                    {
+                      photo ? <Image source={{uri: photo?.uri}} style={{width: 100, height: 100}} />
+                        : <Icon
+                            color={photo ? "green" : "red"}
+                            size={iconsSize}
+                            source={photo ? "check-circle" : "close-circle"}
+                          />
+                    }
+                    
+                    {/* <Icon
                       color={photo ? "green" : "red"}
                       size={iconsSize}
                       source={photo ? "check-circle" : "close-circle"}
-                    />
+                    /> */}
                   </View>
                 </View>
               </View>
@@ -134,9 +143,10 @@ const Index = () => {
             <Button
               className="w-full"
               theme={theme}
-              icon="send-circle"
+              icon="send"
               mode="contained"
-              disabled={!photo}
+              disabled={!photo || loadingEndRun}
+              loading={loadingEndRun}
               onPress={handleEndRun}
             >
               Finalizar
