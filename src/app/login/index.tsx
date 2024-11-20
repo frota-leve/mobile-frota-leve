@@ -27,12 +27,15 @@ const Login = () => {
     };
 
     try {
+      setIsLoading(true);
       const response = await UserService.checkFirstAcess(body);
       setShowConfirmPassword(response?.firstAccess);
       setShowCheckFirstLoginBtn(false);
       setShowPassword(true);
     } catch(err) {
       Alert.alert('Falha na validação do email, por favor tente novamente')
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -7,13 +7,14 @@ import { format } from "date-fns";
 import { ptBR } from 'date-fns/locale/pt-BR';
 import { router } from "expo-router";
 
-type Register = {
+type Race = {
   id: string;
   carName: string;
   carPlate: string;
   startAt: string;
   endAt: string;
   finalMileage: number;
+  startMileage: number;
   violations: number;
   situation: string;
 };
@@ -23,7 +24,7 @@ export default function LastRunsList() {
   const theme = useTheme();
   const iconsSize = 18;
 
-  const [data, setData] = useState<Register[]>([]);
+  const [data, setData] = useState<Race[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export default function LastRunsList() {
       <View>
         <ScrollView className="p-3">
           {data &&
-            data.map((register: Register) => (
+            data.map((register: Race) => (
               <Pressable key={register.id} onPress={() => handlePressRace(register.id)}>
                 <View
                   className="shadow-sm shadow-foreground bg-background items-center py-2 px-2 my-2 border border-foreground rounded-xl"
@@ -99,17 +100,6 @@ export default function LastRunsList() {
                           source="card-text-outline"
                         />
                         <Text className="text-md ml-1">{register.carPlate}</Text>
-                      </View>
-                      <View className="flex-row items-center">
-                        <Icon
-                          color={theme.colors.primary}
-                          size={iconsSize}
-                          source="alert-circle-outline"
-                        />
-                        <Text className="text-md ml-1">
-                          <Text className="font-semibold">Infrações:</Text>{" "}
-                          {register.violations}
-                        </Text>
                       </View>
                     </View>
                     <View className="w-[55%] items-start ">
@@ -146,7 +136,7 @@ export default function LastRunsList() {
                         <Text className="text-md ml-1">
                           <Text className="font-semibold">
                             Percorrido:
-                            {register.finalMileage ? `${register.finalMileage} KM` : ''}
+                            {register.finalMileage === 0 ? ' 0' : (register.finalMileage ? ` ${register.finalMileage - register.startMileage} KM` : ' -')}
                           </Text>
                         </Text>
                       </View>
